@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/view/onboarding_page.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  var isLogin = false.obs;
   @override
   void initState() {
     super.initState();
@@ -19,13 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTime() async {
-    return Timer(const Duration(seconds: 4), navigationPage());
+    Duration timers = const Duration(seconds: 4);
+    return Timer(timers, () => navigationPage());
   }
 
   navigationPage() async {
-    setState(() {
-      Navigator.of(context).pushReplacementNamed('/onboarding');
-    });
+    if (!isLogin.value) {
+      setState(() {
+        Navigator.pushReplacementNamed(context, '/onboarding');
+      });
+    }
   }
 
   @override

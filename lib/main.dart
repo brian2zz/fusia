@@ -8,28 +8,34 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      builder: () => MaterialApp(
-        title: 'Fusia App',
-        navigatorKey: navKey,
-        theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        routes: {
-          '/': (BuildContext context) => const SplashScreen(),
-          '/onboarding': (BuildContext context) => const OnboardingPage(),
-        },
-        debugShowCheckedModeBanner: false,
-      ),
-    );
+        designSize: Size(360, 690),
+        builder: () {
+          return MaterialApp(
+            title: 'Fusia App',
+            navigatorKey: navKey,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            routes: {
+              '/': (BuildContext context) => const SplashScreen(),
+              '/onboarding': (BuildContext context) => const OnboardingPage(),
+            },
+          );
+        });
   }
 }

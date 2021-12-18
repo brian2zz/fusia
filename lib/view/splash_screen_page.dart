@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fusia/color/colors_theme.dart';
-import 'package:fusia/view/onboarding_page.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {

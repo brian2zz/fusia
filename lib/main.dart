@@ -5,7 +5,7 @@ import 'package:fusia/view/splash_screen_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: Size(360, 690),
+        designSize: const Size(360, 690),
         builder: () {
           return MaterialApp(
             title: 'Fusia App',

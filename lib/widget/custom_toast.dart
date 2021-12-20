@@ -13,7 +13,7 @@ class CustomToast extends StatefulWidget {
 class _CustomToastState extends State<CustomToast> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: ScreenUtil.defaultSize.width,
       height: 20.h,
       child: Text(widget.message),

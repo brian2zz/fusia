@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/view/account/account_page.dart';
 import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/home_navigation_menu_page.dart';
+import 'package:fusia/view/login/login_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
+import 'package:fusia/view/register/register_page.dart';
 import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
 
@@ -46,6 +48,8 @@ class _MyAppState extends State<MyApp> {
               '/promo': (BuildContext context) => const PromoPage(),
               '/reward': (BuildContext context) => const RewardPage(),
               '/account': (BuildContext context) => const AccountPage(),
+              '/login': (BuildContext context) => const LoginPage(),
+              '/register': (BuildContext context) => const RegisterPage(),
             },
           );
         });

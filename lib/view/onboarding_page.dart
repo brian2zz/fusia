@@ -65,6 +65,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               setState(() {
                 count += 1;
                 if (count >= 3) {
+                  login();
                   const CustomToast(message: "Hello");
                 } else {
                   scrollboard(count);
@@ -81,6 +82,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
           ),
         );
+
+    // Widget buttonLogin() => TextButton();
 
     Widget buttonSkip() => TextButton(
           onPressed: () =>
@@ -133,5 +136,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
       ),
       value: SystemUiOverlayStyle(statusBarColor: ColorsTheme.white),
     );
+  }
+
+  void login() async {
+    Navigator.pushReplacementNamed(context, '/login');
   }
 }

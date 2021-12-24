@@ -86,8 +86,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     // Widget buttonLogin() => TextButton();
 
     Widget buttonSkip() => TextButton(
-          onPressed: () =>
-              Navigator.pushReplacementNamed(context, '/navigation'),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
           child: Text(
             "Skip",
             style: style2,

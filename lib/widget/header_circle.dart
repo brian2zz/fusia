@@ -14,16 +14,12 @@ class HeaderCircle extends StatefulWidget {
 class _HeaderCircle extends State<HeaderCircle> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        RotatedBox(
-          quarterTurns: 2,
-          child: CustomPaint(
-            painter: CustomCircle(),
-            size: Size(widget.diameter, widget.diameter),
-          ),
-        ),
-      ],
+    return RotatedBox(
+      quarterTurns: 2,
+      child: CustomPaint(
+        painter: CustomCircle(),
+        size: Size(widget.diameter, widget.diameter),
+      ),
     );
   }
 }

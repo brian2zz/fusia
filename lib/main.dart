@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/view/account/account_page.dart';
+import 'package:fusia/view/auth/login_page.dart';
+import 'package:fusia/view/auth/register_page.dart';
 import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/home_navigation_menu_page.dart';
-import 'package:fusia/view/login/login_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
-import 'package:fusia/view/register/register_page.dart';
 import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
 

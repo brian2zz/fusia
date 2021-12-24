@@ -20,6 +20,13 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
   var selectedIndex = 0.obs;
   var data = false.obs;
 
+  TextStyle menuTextStyle(isSelectable) => TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 10.sp,
+        fontWeight: (isSelectable) ? FontWeight.w700 : FontWeight.w400,
+        color: ColorsTheme.black,
+      );
+
   @override
   Widget build(BuildContext context) {
     Widget navigationMenu() => Obx(
@@ -72,6 +79,9 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
                             : (status == "reward")
                                 ? "Reward"
                                 : "Account",
+                    style: (selectedIndex.value == index)
+                        ? menuTextStyle(true)
+                        : menuTextStyle(false),
                   ),
                 ],
               ),
@@ -86,7 +96,7 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(height: 29.h),
-                  Text("Reservation"),
+                  Text("Reservation", style: menuTextStyle(false)),
                 ]),
           ),
         );
@@ -129,7 +139,6 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
             children: items,
           ),
         ),
-        //shape: const CircularNotchedRectangle(),
         color: ColorsTheme.white,
       ),
     );

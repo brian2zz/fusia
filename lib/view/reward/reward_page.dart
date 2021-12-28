@@ -1,7 +1,9 @@
+// import 'package:coba_fusia/color/colors_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fusia/color/colors_theme.dart';
+
+import '../../color/colors_theme.dart';
 
 class RewardPage extends StatefulWidget {
   const RewardPage({Key? key}) : super(key: key);

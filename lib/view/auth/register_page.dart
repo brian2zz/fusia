@@ -1,8 +1,10 @@
+// import 'package:coba_fusia/color/colors_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fusia/color/colors_theme.dart';
 import 'package:intl/intl.dart';
+
+import '../../color/colors_theme.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -201,7 +203,7 @@ Widget _buildButton(BuildContext context) {
       Padding(padding: EdgeInsets.only(top: 16.0)),
       InkWell(
         onTap: () {
-          Navigator.pushReplacementNamed(context, '/navigation');
+          Navigator.pushReplacementNamed(context, '/verification');
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 8.0),

@@ -1,11 +1,17 @@
+// import 'package:coba_fusia/color/colors_theme.dart';
+// import 'package:coba_fusia/view/account/account_page.dart';
+// import 'package:coba_fusia/view/home_dashboard_page.dart';
+// import 'package:coba_fusia/view/promo/promo_page.dart';
+// import 'package:coba_fusia/view/reward/reward_page.dart';
 import 'package:flutter/material.dart';
-import 'package:fusia/color/colors_theme.dart';
 import 'package:fusia/view/account/account_page.dart';
-import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
 import 'package:fusia/view/reward/reward_page.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../color/colors_theme.dart';
+import 'home_dashboard_page.dart';
 
 class HomeNavigationMenu extends StatefulWidget {
   const HomeNavigationMenu({Key? key}) : super(key: key);

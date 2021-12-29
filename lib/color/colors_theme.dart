@@ -8,4 +8,5 @@ class ColorsTheme {
   static Color? lightGrey = const Color(0xff999696);
   static Color? lightRed = const Color(0xffEC1D2F);
   static Color? lightYellow = const Color(0xffECB83F);
+  static Color? neutralDark = const Color(0xff223263);
 }

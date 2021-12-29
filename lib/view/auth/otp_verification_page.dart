@@ -9,6 +9,8 @@ import 'package:sms_autofill/sms_autofill.dart';
 import '../../color/colors_theme.dart';
 
 class OtpVerification extends StatefulWidget {
+  const OtpVerification({Key? key}) : super(key: key);
+
   @override
   _OtpVerificationState createState() => _OtpVerificationState();
 }
@@ -21,9 +23,12 @@ class _OtpVerificationState extends State<OtpVerification> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
-            leading: Icon(
-              Icons.arrow_back,
-              color: Colors.grey.shade600,
+            leading: InkWell(
+              onTap: () => Navigator.of(context).pop(),
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.grey.shade600,
+              ),
             ),
           ),
           body: Container(

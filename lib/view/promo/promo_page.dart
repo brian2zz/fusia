@@ -1,9 +1,9 @@
-// import 'package:coba_fusia/color/colors_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../color/colors_theme.dart';
+import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/widget/custom_appbar.dart';
+import 'package:fusia/widget/product_widget.dart';
 
 class PromoPage extends StatefulWidget {
   const PromoPage({Key? key}) : super(key: key);
@@ -36,12 +36,42 @@ class _PromoPageState extends State<PromoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      child: const SafeArea(
-        child: Scaffold(
-          body: Center(
-            child: Text("Promo"),
+    Widget appbar() => CustomAppBar(title: "Promo");
+
+    Widget itemPromoGridList() => Expanded(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(17.h, 20.h, 17.w, 5.h),
+            child: GridView.builder(
+              itemCount: 8,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 295.h,
+                crossAxisSpacing: 19.w,
+                mainAxisSpacing: 30.h,
+                childAspectRatio: 6.0.h / 8.0.h,
+              ),
+              shrinkWrap: true,
+              itemBuilder: (context, index) => const CustomItemCard(
+                imageItem: 'assets/images/dummy_product.png',
+                description:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet elit volutpat et massa",
+                imageShopItem: 'assets/images/logo_onboarding_2.png',
+              ),
+            ),
           ),
+        );
+
+    Widget body() => Column(
+          children: [
+            appbar(),
+            itemPromoGridList(),
+          ],
+        );
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      child: SafeArea(
+        child: Scaffold(
+          body: body(),
+          resizeToAvoidBottomInset: false,
         ),
       ),
       value: SystemUiOverlayStyle(statusBarColor: ColorsTheme.primary),

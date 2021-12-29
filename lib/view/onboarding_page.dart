@@ -68,7 +68,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 count += 1;
                 if (count >= 3) {
                   login();
-                  const CustomToast(message: "Hello");
                 } else {
                   scrollboard(count);
                 }

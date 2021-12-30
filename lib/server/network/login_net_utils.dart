@@ -23,6 +23,8 @@ class LoginNetUtils {
   }
 
   verifyOTPNetUtils(phone, code) async {
+    print(phone);
+
     Map<String, dynamic> bodyparams = {
       "phone_number": phone,
       "code": code,

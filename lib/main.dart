@@ -61,7 +61,8 @@ class _MyAppState extends State<MyApp> {
               '/account': (BuildContext context) => const AccountPage(),
               '/login': (BuildContext context) => const LoginPage(),
               '/register': (BuildContext context) => const RegisterPage(),
-              '/verification': (BuildContext context) => OtpVerification(),
+              '/verification': (BuildContext context) =>
+                  const OtpVerification(),
             },
           );
         });

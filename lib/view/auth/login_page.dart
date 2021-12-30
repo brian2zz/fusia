@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
 import 'package:fusia/controller/login_controller.dart';
 import 'package:fusia/model/sending_otp_status_model.dart';
+import 'package:fusia/server/arguments_pass/temp_pass_otp.dart';
 import 'package:fusia/widget/custom_progress_loading.dart';
 import 'package:fusia/widget/custom_toast.dart';
 import 'package:get/get.dart';
@@ -142,7 +143,10 @@ Widget _buildButton(BuildContext context, TextEditingController phoneInput,
       responsedata.sendingRespon!.forEach((element) {
         if (element.globalstatustext == "Success") {
           hidedialog(context);
-          Navigator.of(context).pushNamed('/verification');
+          Navigator.of(context).pushNamed(
+            '/verification',
+            arguments: OTPArgumentsPassingData(phoneNumber: phoneInput.text),
+          );
         } else {
           hidedialog(context);
           showToast(context, "gagal melakukan login.");

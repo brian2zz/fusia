@@ -1,9 +1,12 @@
-// import 'dart:js';
-
 // import 'package:coba_fusia/color/colors_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fusia/controller/login_controller.dart';
+import 'package:fusia/model/verify_otp_status_model.dart';
+import 'package:fusia/server/arguments_pass/temp_pass_otp.dart';
+import 'package:fusia/widget/custom_toast.dart';
+import 'package:get/get.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../color/colors_theme.dart';
@@ -16,8 +19,25 @@ class OtpVerification extends StatefulWidget {
 }
 
 class _OtpVerificationState extends State<OtpVerification> {
+  LoginController? controller;
+
+  @override
+  void initState() {
+    super.initState();
+    initConstructor();
+  }
+
+  initConstructor() {
+    controller = Get.put(LoginController());
+  }
+
   @override
   Widget build(BuildContext context) {
+    final otpargs =
+        ModalRoute.of(context)!.settings.arguments as OTPArgumentsPassingData;
+
+    var convertoFormatNumber = otpargs.phoneNumber.replaceFirst("0", "+62 ");
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       child: SafeArea(
         child: Scaffold(
@@ -59,7 +79,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                   SizedBox(
                     height: 25,
                   ),
-                  Text("Sent to +62 823 7025 6208",
+                  Text("Sent to $convertoFormatNumber",
                       style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 14.sp,
@@ -68,7 +88,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                   SizedBox(
                     height: 50,
                   ),
-                  _buildPinText(),
+                  _buildPinText(context, otpargs.phoneNumber, controller!),
                   SizedBox(
                     height: 35,
                   ),
@@ -96,9 +116,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                       children: <Widget>[
                         Padding(padding: EdgeInsets.only(top: 16.0)),
                         InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/navigation');
-                          },
+                          onTap: () {},
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 8.0),
                             width: 400,
@@ -138,7 +156,17 @@ class _OtpVerificationState extends State<OtpVerification> {
 
 Widget _buildButton = Container();
 
-Widget _buildPinText() {
+Widget _buildPinText(
+    BuildContext context, String phoneNumber, LoginController controller) {
+  verifyAccount(phone, code) async {
+    var result = await controller.verifyOTPController(phone, code);
+    showToast(context, result['details']);
+    if (result['status'] == 200) {
+      VerifyOtpStatus responsedata =
+          VerifyOtpStatus.fromJson(result['details']);
+    }
+  }
+
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
     child: PinFieldAutoFill(
@@ -146,9 +174,10 @@ Widget _buildPinText() {
       // BoxDecoration(
       //     borderRadius: BorderRadius.circular(5),
       //     border: Border.all(width: 2)),
-      onCodeChanged: (val) {
-        print(val);
-      },
+      /*onCodeChanged: (val) {
+        
+      },*/
+      onCodeSubmitted: (val) => verifyAccount(phoneNumber, val),
     ),
   );
 }

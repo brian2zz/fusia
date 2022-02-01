@@ -1,13 +1,3 @@
-// import 'package:coba_fusia/view/account/account_page.dart';
-// import 'package:coba_fusia/view/auth/login_page.dart';
-// import 'package:coba_fusia/view/auth/otp_verification_page.dart';
-// import 'package:coba_fusia/view/auth/register_page.dart';
-// import 'package:coba_fusia/view/home_dashboard_page.dart';
-// import 'package:coba_fusia/view/home_navigation_menu_page.dart';
-// import 'package:coba_fusia/view/onboarding_page.dart';
-// import 'package:coba_fusia/view/promo/promo_page.dart';
-// import 'package:coba_fusia/view/reward/reward_page.dart';
-// import 'package:coba_fusia/view/splash_screen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/view/account/account_page.dart';
@@ -41,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: const Size(360, 690),
+        minTextAdapt: true,
         builder: () {
           return MaterialApp(
             title: 'Fusia App',
@@ -49,8 +40,12 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
+            builder: (context,widget) {
+              ScreenUtil.setContext(context);
+              return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: widget!);
+            },
+            home: const SplashScreen(),
             routes: {
-              '/': (BuildContext context) => const SplashScreen(),
               '/navigation': (BuildContext context) =>
                   const HomeNavigationMenu(),
               '/onboarding': (BuildContext context) => const OnboardingPage(),

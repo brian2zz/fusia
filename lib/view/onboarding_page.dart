@@ -1,5 +1,6 @@
 // import 'package:coba_fusia/color/colors_theme.dart';
 // import 'package:coba_fusia/widget/custom_toast.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,14 +29,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
   TextStyle style1 = TextStyle(
     fontFamily: 'Poppins',
     color: ColorsTheme.white,
-    fontSize: 15.sp,
+    fontSize: ScreenUtil().setSp(15),
     fontWeight: FontWeight.w500,
   );
 
   TextStyle style2 = TextStyle(
     fontFamily: 'Poppins',
     color: ColorsTheme.primary,
-    fontSize: 15.sp,
+    fontSize: ScreenUtil().setSp(15),
     fontWeight: FontWeight.w500,
   );
 
@@ -75,7 +76,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             },
             borderRadius: BorderRadius.circular(23.r),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 62.w, vertical: 12.h),
+              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(62), vertical: ScreenUtil().setHeight(12)),
               child: Text(
                 "Next",
                 style: style1,
@@ -116,19 +117,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   selectedDotColor: ColorsTheme.primary,
                   dotColor: Colors.grey,
                 ),
-                top: 410.h,
-                left: 100.w,
-                right: 100.w,
+                top: ScreenUtil().setHeight(410),
+                left: ScreenUtil().setWidth(100),
+                right: ScreenUtil().setWidth(100),
               ),
               Positioned(
                 child: buttonMovetoPage(),
-                bottom: 42.h,
-                right: 20.w,
+                bottom: ScreenUtil().setHeight(42),
+                right: ScreenUtil().setWidth(20),
               ),
               Positioned(
                 child: buttonSkip(),
-                bottom: 42.h,
-                left: 20.w,
+                bottom: ScreenUtil().setHeight(42),
+                left: ScreenUtil().setWidth(20),
               ),
             ],
           ),

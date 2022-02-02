@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/controller/login_controller.dart';
 import 'package:fusia/model/verify_otp_status_model.dart';
 import 'package:fusia/server/arguments_pass/temp_pass_otp.dart';
+import 'package:fusia/widget/custom_progress_loading.dart';
 import 'package:fusia/widget/custom_toast.dart';
 import 'package:get/get.dart';
 import 'package:sms_autofill/sms_autofill.dart';
@@ -20,6 +21,8 @@ class OtpVerification extends StatefulWidget {
 
 class _OtpVerificationState extends State<OtpVerification> {
   LoginController? controller;
+  
+  var kodeotp;
 
   @override
   void initState() {
@@ -29,6 +32,7 @@ class _OtpVerificationState extends State<OtpVerification> {
 
   initConstructor() {
     controller = Get.put(LoginController());
+    kodeotp = "".obs;
   }
 
   @override
@@ -110,13 +114,13 @@ class _OtpVerificationState extends State<OtpVerification> {
                   SizedBox(
                     height: 35,
                   ),
-                  Container(
+                  /*Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: Column(
                       children: <Widget>[
                         Padding(padding: EdgeInsets.only(top: 16.0)),
                         InkWell(
-                          onTap: () {},
+                          onTap: () =>verifyAccount1(otpargs.phoneNumber, , context, controller) ,
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 8.0),
                             width: 400,
@@ -140,7 +144,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -154,16 +158,29 @@ class _OtpVerificationState extends State<OtpVerification> {
   Widget body = Container();
 }
 
-Widget _buildButton = Container();
+verifyAccount1(phone, code,context,controller) async {
+    showdialog(context);
+    var result = await controller.verifyOTPController(phone, code);
+    //showToast(context, result['details']);
+    if (result['status'] == 200) {
+      VerifyOtpStatus responsedata =
+          VerifyOtpStatus.fromJson(result['details']);
+      hidedialog(context);
+      Navigator.of(context).pushNamed('/home_dashboard');
+    }
+}
 
 Widget _buildPinText(
     BuildContext context, String phoneNumber, LoginController controller) {
   verifyAccount(phone, code) async {
+    showdialog(context);
     var result = await controller.verifyOTPController(phone, code);
-    showToast(context, result['details']);
+    //showToast(context, result['details']);
     if (result['status'] == 200) {
       VerifyOtpStatus responsedata =
           VerifyOtpStatus.fromJson(result['details']);
+      hidedialog(context);
+      Navigator.of(context).pushNamed('/home_dashboard');
     }
   }
 

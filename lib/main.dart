@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/view/account/account_page.dart';
+import 'package:fusia/view/account/account_page.dart';
 import 'package:fusia/view/auth/login_page.dart';
 import 'package:fusia/view/auth/otp_verification_page.dart';
 import 'package:fusia/view/auth/register_page.dart';
@@ -40,11 +41,13 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            builder: (context,widget) {
+            builder: (context, widget) {
               ScreenUtil.setContext(context);
-              return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: widget!);
+              return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget!);
             },
-            home: const SplashScreen(),
+            home: const AccountPage(),
             routes: {
               '/navigation': (BuildContext context) =>
                   const HomeNavigationMenu(),

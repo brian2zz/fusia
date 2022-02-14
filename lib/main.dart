@@ -14,6 +14,7 @@ import 'package:fusia/view/home_navigation_menu_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
 import 'package:fusia/view/promo/detail_promo_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
+import 'package:fusia/view/reservation/reservation_page.dart';
 import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
 import 'package:fusia/view/voucher/voucher_home.dart';
@@ -47,11 +48,13 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            builder: (context,widget) {
+            builder: (context, widget) {
               ScreenUtil.setContext(context);
-              return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: widget!);
+              return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: widget!);
             },
-            home: const AccountPage(),
+            home: const reservation(),
             routes: {
               '/navigation': (BuildContext context) =>
                   const HomeNavigationMenu(),
@@ -67,8 +70,10 @@ class _MyAppState extends State<MyApp> {
                   const OtpVerification(),
               '/vouchers': (BuildContext context) => VoucherHome(),
               '/membership': (BuildContext context) => const membership(),
-              '/editaccount': (BuildContext context) => const AccountInformation(),
-              '/changepassword': (BuildContext context) => const ChangePassword(),
+              '/editaccount': (BuildContext context) =>
+                  const AccountInformation(),
+              '/changepassword': (BuildContext context) =>
+                  const ChangePassword(),
               '/detailpromo': (BuildContext context) => DetailPromo(),
             },
           );

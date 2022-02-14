@@ -9,6 +9,7 @@ import 'package:fusia/widget/custom_appbar_account.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class AccountInformation extends StatelessWidget {
   const AccountInformation({Key? key}) : super(key: key);
@@ -22,8 +23,14 @@ class AccountInformation extends StatelessWidget {
   }
 }
 
-class body extends StatelessWidget {
+class body extends StatefulWidget {
   const body({Key? key}) : super(key: key);
+
+  @override
+  _bodyState createState() => _bodyState();
+}
+
+class _bodyState extends State<body> {
   getData() async {
     try {
       var response = await http.get(Uri.parse(
@@ -34,6 +41,15 @@ class body extends StatelessWidget {
       }
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  DateTime? date;
+  String? dateBirthday() {
+    if (date == null) {
+      return null;
+    } else {
+      return DateFormat('yyyy-MM-dd').format(date!);
     }
   }
 
@@ -108,11 +124,47 @@ class body extends StatelessWidget {
           label: 'Birthday',
         ),
         SizedBox(height: 10),
-        textField(
-          textController: DataUser[2]['value'],
-        ),
+        _birthdayInput(DataUser),
       ],
     );
+  }
+
+  Widget _birthdayInput(DataUser) {
+    return TextFormField(
+      onTap: () => PickDate(context),
+      decoration: InputDecoration(
+        suffixIcon: Icon(
+          Icons.date_range_outlined,
+          color: Color.fromARGB(255, 144, 152, 177),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+        ),
+        border: new OutlineInputBorder(
+            borderSide: new BorderSide(
+          color: Color.fromARGB(255, 235, 240, 255),
+        )),
+      ),
+      controller: TextEditingController(
+          text:
+              (dateBirthday() == null) ? DataUser[2]['value'] : dateBirthday()),
+      style: TextStyle(
+        color: Color.fromARGB(255, 144, 152, 177),
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Poppins',
+      ),
+    );
+  }
+
+  Future PickDate(BuildContext context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5));
+    if (newDate == null) return;
+    setState(() => date = newDate);
   }
 
   Widget _changePassword(BuildContext context) {

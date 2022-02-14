@@ -17,12 +17,12 @@ showToast(context, message) {
             fontFamily: 'Poppins',
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
-            color: ColorsTheme.black,
+            color: ColorsTheme.white,
           ),
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.r),
-          color: ColorsTheme.primary!.withOpacity(0.14),
+          color: ColorsTheme.black!,
         ),
       );
 

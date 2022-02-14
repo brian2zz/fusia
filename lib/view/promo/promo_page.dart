@@ -36,7 +36,7 @@ class _PromoPageState extends State<PromoPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget appbar() => CustomAppBar(title: "Promo");
+    Widget appbar() => CustomAppBar(title: "Promo",isAccessDetail: false);
 
     Widget itemPromoGridList() => Expanded(
           child: Padding(

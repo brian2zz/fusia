@@ -1,12 +1,8 @@
-// import 'package:coba_fusia/color/colors_theme.dart';
-// import 'package:coba_fusia/view/account/account_page.dart';
-// import 'package:coba_fusia/view/home_dashboard_page.dart';
-// import 'package:coba_fusia/view/promo/promo_page.dart';
-// import 'package:coba_fusia/view/reward/reward_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fusia/view/account/account_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
 import 'package:fusia/view/reward/reward_page.dart';
+import 'package:fusia/widget/custom_toast.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,7 +31,9 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
-    Widget navigationMenu() => Obx(
+    
+    Widget navigationMenu() {
+      return Obx(
           () => WillPopScope(
             child: (selectedIndex.value == 0)
                 ? const HomeDashboardPage()
@@ -47,6 +45,7 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
             onWillPop: onBackPressed,
           ),
         );
+    }
 
     Widget itemNavigation(index, status) => Expanded(
           child: SizedBox(
@@ -83,7 +82,7 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
                         : (status == "promo")
                             ? "Promo"
                             : (status == "reward")
-                                ? "Reward"
+                                ? "Outlets"
                                 : "Account",
                     style: (selectedIndex.value == index)
                         ? menuTextStyle(true)
@@ -165,7 +164,7 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
         currentBackPressedTime = now;
       });
 
-      print("Tekan sekali lagi untuk keluar...");
+      showToast(context, "Tekan sekali lagi untuk keluar...");
       return Future.value(false);
     }
     return Future.value(true);

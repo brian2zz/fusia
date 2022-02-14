@@ -166,7 +166,7 @@ verifyAccount1(phone, code,context,controller) async {
       VerifyOtpStatus responsedata =
           VerifyOtpStatus.fromJson(result['details']);
       hidedialog(context);
-      Navigator.of(context).pushNamed('/home_dashboard');
+      Navigator.of(context).pushNamed('/navigation');
     }
 }
 
@@ -175,12 +175,14 @@ Widget _buildPinText(
   verifyAccount(phone, code) async {
     showdialog(context);
     var result = await controller.verifyOTPController(phone, code);
-    //showToast(context, result['details']);
     if (result['status'] == 200) {
       VerifyOtpStatus responsedata =
           VerifyOtpStatus.fromJson(result['details']);
       hidedialog(context);
-      Navigator.of(context).pushNamed('/home_dashboard');
+
+      controller.storedUserLocalData("true",result['details']['token'], result['details']['cust_id']);
+
+      Navigator.of(context).pushNamed('/navigation');
     }
   }
 
@@ -188,12 +190,6 @@ Widget _buildPinText(
     padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 10.0),
     child: PinFieldAutoFill(
       codeLength: 4,
-      // BoxDecoration(
-      //     borderRadius: BorderRadius.circular(5),
-      //     border: Border.all(width: 2)),
-      /*onCodeChanged: (val) {
-        
-      },*/
       onCodeSubmitted: (val) => verifyAccount(phoneNumber, val),
     ),
   );

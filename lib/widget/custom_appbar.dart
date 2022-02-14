@@ -4,8 +4,9 @@ import 'package:fusia/color/colors_theme.dart';
 
 class CustomAppBar extends StatefulWidget {
   var title;
+  var isAccessDetail;
 
-  CustomAppBar({Key? key, @required this.title}) : super(key: key);
+  CustomAppBar({Key? key, @required this.title, @required this.isAccessDetail}) : super(key: key);
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
@@ -21,7 +22,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () {},
+                onTap: () => (widget.isAccessDetail) ? Navigator.pop(context) : Navigator.restorablePopAndPushNamed(context, '/navigation'),
                 child: Image.asset('assets/icons/ic_arrow_back.png'),
               ),
               SizedBox(width: 21.w),

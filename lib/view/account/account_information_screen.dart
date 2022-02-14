@@ -53,29 +53,7 @@ class body extends StatelessWidget {
                 SizedBox(
                   height: 60,
                 ),
-                Label(
-                  label: 'Email',
-                ),
-                SizedBox(height: 10),
-                textField(
-                  textController: DataUser[1]['value'],
-                ),
-                SizedBox(height: 10),
-                Label(
-                  label: 'Phone Number',
-                ),
-                SizedBox(height: 10),
-                textField(
-                  textController: DataUser[3]['value'],
-                ),
-                SizedBox(height: 10),
-                Label(
-                  label: 'Birthday',
-                ),
-                SizedBox(height: 10),
-                textField(
-                  textController: DataUser[2]['value'],
-                ),
+                _formEditAccount(DataUser),
                 SizedBox(height: 20),
                 _changePassword(context),
                 SizedBox(height: 25),
@@ -102,6 +80,38 @@ class body extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  Widget _formEditAccount(DataUser) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Label(
+          label: 'Email',
+        ),
+        SizedBox(height: 10),
+        textField(
+          textController: DataUser[1]['value'],
+        ),
+        SizedBox(height: 10),
+        Label(
+          label: 'Phone Number',
+        ),
+        SizedBox(height: 10),
+        textField(
+          textController: DataUser[3]['value'],
+        ),
+        SizedBox(height: 10),
+        Label(
+          label: 'Birthday',
+        ),
+        SizedBox(height: 10),
+        textField(
+          textController: DataUser[2]['value'],
+        ),
+      ],
     );
   }
 

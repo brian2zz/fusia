@@ -83,14 +83,14 @@ class _CustomItemCardState extends State<CustomItemCard> {
                 height: 1.h,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(context, '/detailpromo'),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(10.r),
                   bottomRight: Radius.circular(10.r),
                 ),
                 splashColor: ColorsTheme.primary!.withOpacity(0.14),
                 child: Container(
-                  padding: EdgeInsets.only(top: 13.h, bottom: 13.h),
+                  padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
                   child: Center(
                     child: Text("Details", style: itemProductTextStyle(true)),
                   ),
@@ -104,7 +104,7 @@ class _CustomItemCardState extends State<CustomItemCard> {
       children: [
         Container(
           width: 158.w,
-          height: 223.h,
+          height: 228.h,
           child: Stack(
             clipBehavior: Clip.none,
             children: [

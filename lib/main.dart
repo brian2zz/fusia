@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:fusia/view/account/account_information_screen.dart';
 import 'package:fusia/view/account/account_page.dart';
-import 'package:fusia/view/account/account_page.dart';
+import 'package:fusia/view/account/change_password_page.dart';
+import 'package:fusia/view/account/memberhip_screen.dart';
+
 import 'package:fusia/view/auth/login_page.dart';
 import 'package:fusia/view/auth/otp_verification_page.dart';
 import 'package:fusia/view/auth/register_page.dart';
 import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/home_navigation_menu_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
+import 'package:fusia/view/promo/detail_promo_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
 import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
+import 'package:fusia/view/voucher/voucher_home.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,11 +47,9 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            builder: (context, widget) {
+            builder: (context,widget) {
               ScreenUtil.setContext(context);
-              return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                  child: widget!);
+              return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: widget!);
             },
             home: const AccountPage(),
             routes: {
@@ -61,6 +65,11 @@ class _MyAppState extends State<MyApp> {
               '/register': (BuildContext context) => const RegisterPage(),
               '/verification': (BuildContext context) =>
                   const OtpVerification(),
+              '/vouchers': (BuildContext context) => VoucherHome(),
+              '/membership': (BuildContext context) => const membership(),
+              '/editaccount': (BuildContext context) => const AccountInformation(),
+              '/changepassword': (BuildContext context) => const ChangePassword(),
+              '/detailpromo': (BuildContext context) => DetailPromo(),
             },
           );
         });

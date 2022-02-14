@@ -1,10 +1,46 @@
 import 'dart:convert';
 
+import 'package:fusia/server/local/local_server.dart';
 import 'package:fusia/server/network/login_net_utils.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   LoginNetUtils netutils = Get.put(LoginNetUtils());
+  LocalUtils localUtils = Get.put(LocalUtils());
+
+  static var userToken = "".obs;
+  static var customerId = "".obs;
+  static var isLogin = "".obs;
+
+  //LOCAL DATA//
+
+  storedUserLocalData(statusLogin,token,customerId) async {
+    await localUtils.storeUserLocal(statusLogin,token, customerId);
+  }
+
+  retrieveUserLocalData() async {
+    await localUtils.retrieveUserLocal();
+
+    userToken.value = LocalUtils.token.value;
+    customerId.value = LocalUtils.customerId.value;
+  }
+
+  retrieveUserIsLogin() async {
+    await localUtils.retrieveIsLogin();
+
+    isLogin.value = LocalUtils.statusLogin.value;
+  }
+
+  clearData() async {
+    await localUtils.clearData();
+
+    userToken.value = "";
+    customerId.value = "";
+    isLogin.value = "";
+  }
+
+  
+  //NETWORK//
 
   requestLoginController(phone) async {
     var result = await netutils.requestLoginNetUtils(phone);

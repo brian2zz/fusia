@@ -9,6 +9,12 @@ import 'package:fusia/widget/custom_appbar_account.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+TextStyle benefitStyle = TextStyle(
+  color: Color.fromARGB(255, 100, 100, 100),
+  fontWeight: FontWeight.bold,
+  fontFamily: 'Poppins',
+);
+
 class membership extends StatelessWidget {
   const membership({Key? key}) : super(key: key);
 
@@ -59,7 +65,8 @@ class _bodyState extends State<body> {
                   SizedBox(height: 30),
                   Container(
                     margin: EdgeInsets.only(top: 10),
-                    child: CardMember(point: value, name: DataUser[0]['value']),
+                    child: BuildCardMember(
+                        point: value, name: DataUser[0]['value']),
                   ),
                   _indicatorPoint(),
                   _progressMembership(),
@@ -89,12 +96,40 @@ class _bodyState extends State<body> {
         ),
         SizedBox(height: 20),
         (value >= 0 && value <= 125)
-            ? benefitBronze()
+            ? BuildBenefit(
+                text1:
+                    'Spent IDR 3,000,000 - IDR 6,000,000 for the last 3 months',
+                text2:
+                    'Additional Benefit : Every 10,000 purchase will be gained 2 points',
+                text3:
+                    'For Catering Service, every IDR 100,000 purchase will be gained 4 points',
+                text4: '')
             : (value >= 125 && value <= 250)
-                ? benefitGold()
+                ? BuildBenefit(
+                    text1:
+                        'Spent IDR 6,000,000 - IDR 15,000,000 for the last 3 months',
+                    text2:
+                        'Additional Benefit : Every 10,000 purchase will be gained 3 points',
+                    text3:
+                        'For Catering Service, every IDR 100,000 purchase will be gained 5 points',
+                    text4: '')
                 : (value > 250 && value <= 375)
-                    ? benefitPlatinum()
-                    : benefitVvip(),
+                    ? BuildBenefit(
+                        text1:
+                            'Spent IDR 6,000,000 - IDR 15,000,000 for the last 3 months',
+                        text2:
+                            'Additional Benefit : Every 10,000 purchase will be gained 3 points',
+                        text3:
+                            'For Catering Service, every IDR 100,000 purchase will be gained 5 points',
+                        text4: '')
+                    : BuildBenefit(
+                        text1:
+                            'Spent over IDR 15,000,000 for the last 3 months',
+                        text2:
+                            'Additional Benefit : Every 10,000 purchase will be gained 4 points',
+                        text3: 'Gain 5 points per every visit',
+                        text4:
+                            'For Catering Service, every IDR 100,000 purchase will be gained 6 points')
       ],
     );
   }
@@ -210,9 +245,17 @@ class _bodyState extends State<body> {
   }
 }
 
-class benefitBronze extends StatelessWidget {
-  const benefitBronze({
+class BuildBenefit extends StatelessWidget {
+  final String text1;
+  final String text2;
+  final String text3;
+  final String text4;
+  const BuildBenefit({
     Key? key,
+    required this.text1,
+    required this.text2,
+    required this.text3,
+    required this.text4,
   }) : super(key: key);
 
   @override
@@ -220,116 +263,16 @@ class benefitBronze extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BenefitText(
-          text: 'Spent IDR 3,000,000 - IDR 6,000,000 for the last 3 months',
-        ),
+        Text(text1, style: benefitStyle),
         SizedBox(height: 20),
-        BenefitText(
-            text:
-                'Additional Benefit : Every 10,000 purchase will be gained 2 points'),
+        Text(text2, style: benefitStyle),
         SizedBox(height: 20),
-        BenefitText(
-            text:
-                'For Catering Service, every IDR 100,000 purchase will be gained 4 points'),
+        Text(text3, style: benefitStyle),
+        SizedBox(height: 20),
+        Text(text4, style: benefitStyle),
       ],
     );
   }
 }
 
-class benefitGold extends StatelessWidget {
-  const benefitGold({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BenefitText(
-          text: 'Spent IDR 6,000,000 - IDR 15,000,000 for the last 3 months',
-        ),
-        SizedBox(height: 20),
-        BenefitText(
-            text:
-                'Additional Benefit : Every 10,000 purchase will be gained 3 points'),
-        SizedBox(height: 20),
-        BenefitText(
-            text:
-                'For Catering Service, every IDR 100,000 purchase will be gained 5 points'),
-      ],
-    );
-  }
-}
-
-class benefitPlatinum extends StatelessWidget {
-  const benefitPlatinum({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BenefitText(
-          text: 'Spent IDR 6,000,000 - IDR 15,000,000 for the last 3 months',
-        ),
-        SizedBox(height: 20),
-        BenefitText(
-            text:
-                'Additional Benefit : Every 10,000 purchase will be gained 3 points'),
-        SizedBox(height: 20),
-        BenefitText(
-            text:
-                'For Catering Service, every IDR 100,000 purchase will be gained 5 points'),
-      ],
-    );
-  }
-}
-
-class benefitVvip extends StatelessWidget {
-  const benefitVvip({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BenefitText(
-          text: 'Spent over IDR 15,000,000 for the last 3 months',
-        ),
-        SizedBox(height: 20),
-        BenefitText(
-            text:
-                'Additional Benefit : Every 10,000 purchase will be gained 4 points Gain 5 points per every visit'),
-        SizedBox(height: 20),
-        BenefitText(
-            text:
-                'For Catering Service, every IDR 100,000 purchase will be gained 6 points'),
-      ],
-    );
-  }
-}
-
-class BenefitText extends StatelessWidget {
-  final String text;
-  const BenefitText({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: Color.fromARGB(255, 100, 100, 100),
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Poppins',
-      ),
-    );
-  }
-}

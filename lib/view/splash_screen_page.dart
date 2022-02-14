@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/controller/login_controller.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,10 +15,36 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  var isLogin = false.obs;
+  
+  //controller
+  LoginController? controller;
+  
+  //global variable  
+  var isLogin;
+
   @override
   void initState() {
     super.initState();
+    initConstructor();
+    initData();
+    //startTime();
+  }
+
+  initConstructor() {
+    controller = Get.put(LoginController());
+
+    isLogin = "false".obs;
+  }
+
+  initData() async {
+    await controller!.retrieveUserIsLogin();
+    
+    if(LoginController.isLogin.value != "") {
+      isLogin.value = LoginController.isLogin.value;
+    } else {
+      isLogin.value = "false";
+    }
+
     startTime();
   }
 
@@ -27,9 +54,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   navigationPage() async {
-    if (!isLogin.value) {
+    if (isLogin.value == "false") {
       setState(() {
         Navigator.pushReplacementNamed(context, '/onboarding');
+      });
+    } else {
+      setState(() {
+        Navigator.pushReplacementNamed(context, '/navigation');
       });
     }
   }

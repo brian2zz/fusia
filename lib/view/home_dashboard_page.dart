@@ -1,11 +1,17 @@
-import 'package:carousel_slider/carousel_controller.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/controller/dashboard_controller.dart';
+import 'package:fusia/controller/login_controller.dart';
+import 'package:fusia/model/dashboard_model.dart';
+import 'package:fusia/widget/custom_toast.dart';
 import 'package:fusia/widget/header_circle.dart';
+import 'package:fusia/widget/product_widget.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:get/get.dart';
 
 class HomeDashboardPage extends StatefulWidget {
   const HomeDashboardPage({Key? key}) : super(key: key);
@@ -15,8 +21,18 @@ class HomeDashboardPage extends StatefulWidget {
 }
 
 class _HomeDashboardPageState extends State<HomeDashboardPage> {
-  final _currentPageNotifier = ValueNotifier<int>(0);
-  CarouselController controllerPromo = CarouselController();
+  
+  //utils
+  var _currentPageNotifier;
+  CarouselController? controllerPromo;
+
+  //controller
+  LoginController? userController;
+  DashboardController? dashboardController;
+
+  //global variable
+  var userToken;
+  var customerId;
 
   TextStyle headerStyle = TextStyle(
     fontFamily: 'Poppins',
@@ -60,11 +76,52 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
         color: ColorsTheme.primary,
       );
 
+  @override
+  initState() {
+    super.initState();
+
+    initConstructor();
+    initData();
+  }
+
+  initConstructor() {
+    controllerPromo = CarouselController();
+    _currentPageNotifier = ValueNotifier<int>(0);
+
+    userController = Get.put(LoginController());
+    dashboardController = Get.put(DashboardController());
+
+    userToken = "".obs;
+    customerId = "".obs;
+  }
+
+  initData() async {
+    await userController!.retrieveUserLocalData();
+
+    setState(() {
+      userToken.value = LoginController.userToken.value;
+      customerId.value = LoginController.customerId.value;
+
+      retrieveHomeDashboard(userToken.value,customerId.value);
+    });
+
+  }
+
+  retrieveHomeDashboard(token,customerId) async {
+
+    var result = await dashboardController!.retrieveDashboard(token, customerId);
+
+    if(result['status'] == 200) {
+      DashboardModel responsedata = DashboardModel.fromJson(result['details']);
+      print(responsedata.databody!.custNama);
+    }
+  }
+
   scrollboard(value) {
     setState(() {
       _currentPageNotifier.value = value;
       //count = value;
-      controllerPromo.jumpToPage(value);
+      controllerPromo!.jumpToPage(value);
     });
   }
 
@@ -126,7 +183,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
         );
 
     Widget iconMenu(status) => InkWell(
-          onTap: () {},
+          onTap: () => (status == "coupon") ? Navigator.pushNamed(context, '/vouchers') : showToast(context, "Fitur ini dalam tahap pengembangan"),
           child: Column(
             children: [
               SizedBox(
@@ -141,7 +198,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
               SizedBox(height: 5.h),
               Text(
                 (status == "coupon")
-                    ? "My Coupon"
+                    ? "Vouchers"
                     : (status == "delivery")
                         ? "Delivery"
                         : "Transaksi",
@@ -385,92 +442,6 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
         );
 
     //PRODUCT WIDGET
-    Widget brandingIcon() => Positioned(
-          child: Container(
-            height: 26.h,
-            width: 26.w,
-            child: CircleAvatar(
-              backgroundColor: ColorsTheme.white!,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(4.w, 8.h, 3.w, 7.h),
-                child: SizedBox(
-                  width: 19.w,
-                  height: 11.h,
-                  child: Image.asset('assets/images/logo_onboarding_2.png'),
-                ),
-              ),
-            ),
-            decoration: ShapeDecoration(
-              shape: CircleBorder(
-                side: BorderSide(color: ColorsTheme.lightYellow!, width: 2.w),
-              ),
-            ),
-          ),
-          top: 101.h,
-          right: 15.w,
-        );
-
-    Widget contentItemProduct() => Column(
-          children: [
-            SizedBox(
-              width: 158.w,
-              height: 116.h,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.r),
-                  topRight: Radius.circular(10.r),
-                ),
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: Image.asset('assets/images/dummy_product.png'),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(8.w, 25.h, 21.w, 7.h),
-              child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet elit volutpat et massa,",
-                style: itemProductTextStyle(false),
-              ),
-            ),
-            Divider(
-              color: ColorsTheme.primary!.withOpacity(0.14),
-              height: 1.h,
-            ),
-            InkWell(
-              onTap: () {},
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10.r),
-                bottomRight: Radius.circular(10.r),
-              ),
-              splashColor: ColorsTheme.primary!.withOpacity(0.14),
-              child: Container(
-                padding: EdgeInsets.only(top: 7.w, bottom: 11.h),
-                child: Center(
-                  child: Text("Details", style: itemProductTextStyle(true)),
-                ),
-              ),
-            ),
-          ],
-        );
-
-    Widget itemProduct() => Container(
-          width: 158.w,
-          child: Stack(
-            children: [
-              contentItemProduct(),
-              brandingIcon(),
-            ],
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(
-              color: ColorsTheme.primary!.withOpacity(0.14),
-              width: 1.w,
-            ),
-          ),
-        );
-
     Widget productList() => Padding(
           padding: EdgeInsets.only(top: 5.h, bottom: 10.h),
           child: SizedBox(
@@ -481,7 +452,7 @@ class _HomeDashboardPageState extends State<HomeDashboardPage> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) => Padding(
                 padding: EdgeInsets.only(left: 20.w),
-                child: itemProduct(),
+                child: const CustomItemCard(imageShopItem: 'assets/images/logo_onboarding_2.png',imageItem: 'assets/images/dummy_product.png',description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet elit volutpat et massa,"),
               ),
             ),
           ),

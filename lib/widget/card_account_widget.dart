@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fusia/color/colors_theme.dart';
 
 class BuildCardMember extends StatelessWidget {
   final String name;
@@ -18,6 +19,7 @@ class BuildCardMember extends StatelessWidget {
               ? CardMember(
                   point: point,
                   name: name,
+                  tier: 'Bronze',
                   color: LinearGradient(
                       colors: [Color(0xFFDEC598), Color(0xFFBC9B68)]),
                 )
@@ -25,56 +27,29 @@ class BuildCardMember extends StatelessWidget {
                   ? CardMember(
                       point: point,
                       name: name,
+                      tier: 'Gold',
                       color: LinearGradient(colors: [
-                        Color.fromARGB(
-                          255,
-                          254,
-                          201,
-                          25,
-                        ),
-                        Color.fromARGB(
-                          255,
-                          228,
-                          161,
-                          18,
-                        ),
+                        Color.fromARGB(255, 254, 201, 25),
+                        Color.fromARGB(255, 228, 161, 18),
                       ]),
                     )
                   : (point > 250 && point <= 375)
                       ? CardMember(
                           point: point,
                           name: name,
+                          tier: 'Platinum',
                           color: LinearGradient(colors: [
-                            Color.fromARGB(
-                              255,
-                              166,
-                              166,
-                              166,
-                            ),
-                            Color.fromARGB(
-                              255,
-                              108,
-                              108,
-                              108,
-                            ),
+                            Color.fromARGB(255, 166, 166, 166),
+                            Color.fromARGB(255, 108, 108, 108),
                           ]),
                         )
                       : CardMember(
                           point: point,
                           name: name,
+                          tier: "Vvip",
                           color: LinearGradient(colors: [
-                            Color.fromARGB(
-                              255,
-                              152,
-                              144,
-                              227,
-                            ),
-                            Color.fromARGB(
-                              255,
-                              177,
-                              244,
-                              207,
-                            ),
+                            Color.fromARGB(255, 152, 144, 227),
+                            Color.fromARGB(255, 177, 244, 207),
                           ]),
                         ),
         ],
@@ -88,40 +63,49 @@ class CardMember extends StatelessWidget {
     Key? key,
     required this.point,
     required this.name,
+    required this.tier,
     required this.color,
   }) : super(key: key);
 
   final double point;
   final String name;
+  final String tier;
   final Gradient color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 240,
-      // width: 400,
-      padding: EdgeInsets.all(20.0),
+      height: 240.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         gradient: color,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
+          LayerComponentCard2(),
+          LayerComponentCard1(),
+        ],
+      ),
+    );
+  }
+
+  Widget LayerComponentCard2() => Transform.translate(
+        offset: const Offset(30, 0.0),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Gold",
+                    tier,
                     style: TextStyle(
                         color: Colors.brown.shade600,
                         fontSize: 16.sp,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w900),
                   ),
+                  SizedBox(height: 6.h),
                   Text(
                     '${(point).toStringAsFixed(0)}pts',
                     style: TextStyle(
@@ -132,28 +116,54 @@ class CardMember extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: Image.asset(
-                  'assets/icons/ic_medal.png',
+              left: 0.w,
+              top: 24.h,
+            ),
+            Positioned(
+              child: SizedBox(
+                height: 37.h,
+                width: 37.w,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Image.asset(
+                    'assets/icons/ic_medal.png',
+                  ),
                 ),
               ),
-            ],
+              right: 56.w,
+              top: 24.h,
+            ),
+            Positioned(
+              child: Text(
+                name,
+                style: TextStyle(
+                    color: ColorsTheme.whiteCream,
+                    fontSize: 14.sp,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700),
+              ),
+              bottom: 19.h,
+              left: 0.w,
+            ),
+          ],
+        ),
+      );
+  Widget LayerComponentCard1() => Positioned(
+        child: Transform.translate(
+          offset: const Offset(-30, 0.0),
+          child: SizedBox(
+            width: 120.w,
+            height: 145.h,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: Opacity(
+                opacity: 0.3,
+                child: Image.asset('assets/images/mascot.png'),
+              ),
+            ),
           ),
-          SizedBox(
-            height: 120,
-          ),
-          Text(
-            name,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.sp,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w900),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        right: -29.w,
+        bottom: -38.h,
+      );
 }

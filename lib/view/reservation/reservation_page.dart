@@ -37,7 +37,7 @@ InputDecoration outlet = InputDecoration(
       borderSide: new BorderSide(
     color: Color.fromARGB(255, 235, 240, 255),
   )),
-  hintText: 'outlet',
+  hintText: 'Outlet',
   hintStyle: TextStyle(
     color: Color.fromARGB(255, 144, 152, 177),
     fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ TextStyle textFormStyle = TextStyle(
     2,
   ),
   fontWeight: FontWeight.bold,
-  fontSize: 12.sp,
+  fontSize: 16.sp,
   fontFamily: 'Poppins',
 );
 
@@ -83,140 +83,200 @@ class _reservationState extends State<reservation> {
     }
   }
 
+  int value = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: "Reservation"),
       body: _body(context),
+      bottomNavigationBar: _makeReservationButton(),
     );
   }
 
-  Widget _body(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          _formReservation(context),
-          SizedBox(height: 20),
-          SizedBox(
-            height: 60,
-            width: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                color: Color.fromARGB(255, 80, 36, 35),
-                onPressed: () {},
-                child: Text(
-                  'Make Reservation',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
+  Widget _makeReservationButton() => Padding(
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+        child: SizedBox(
+          height: 60.h,
+          width: double.infinity,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: RaisedButton(
+              padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 40.h),
+              color: Color.fromARGB(255, 80, 36, 35),
+              onPressed: () {},
+              child: Text(
+                'Make Reservation',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      );
+
+  Widget _body(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: new SingleChildScrollView(
+          child: _formReservation(context),
+        ),
+      );
 
   Widget _formReservation(BuildContext context) {
+    void _incrementCounter() {
+      setState(() {
+        value++;
+      });
+    }
+
+    void _decrementCounter() {
+      setState(() {
+        value--;
+      });
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 60),
+        SizedBox(height: 60.h),
         formDateTime(
           press: () => PickDate(context),
           text: dateReservation(),
           icon: Icons.date_range_outlined,
-          hint: 'tanggal',
+          hint: 'Tanggal',
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 10.h),
         formDateTime(
           press: () => PickTime(context),
           text: timeReservation(),
           icon: Icons.access_time,
-          hint: 'pukul',
+          hint: 'Pukul',
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 10.h),
         _formGuest(),
-        SizedBox(height: 10),
+        SizedBox(height: 10.h),
         _formOutlet(),
         SizedBox(height: 50),
         Text(
           'Menu',
           style: textFormStyle,
         ),
+        SizedBox(height: 20.h),
         _formMenu(),
-        SizedBox(height: 10),
+        SizedBox(height: 20.h),
+        _quantity(_decrementCounter, _incrementCounter),
+        SizedBox(height: 20.h),
         _formDescription(),
+        SizedBox(height: 20.h),
       ],
     );
   }
 
-  Widget _formDescription() {
-    return TextFormField(
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
-        ),
-        border: new OutlineInputBorder(
-            borderSide: new BorderSide(
-          color: Color.fromARGB(255, 235, 240, 255),
-        )),
-        hintText: 'Keterangan',
-        hintStyle: TextStyle(
-          color: Color.fromARGB(255, 144, 152, 177),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
-        ),
-      ),
-      minLines: 10,
-      keyboardType: TextInputType.multiline,
-      maxLines: null,
-    );
-  }
+  Widget _quantity(void _decrementCounter(), void _incrementCounter()) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'QTY',
+            style: textFormStyle,
+          ),
+          Container(
+            height: 35.h,
+            width: 120.w,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 80, 36, 35),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: (value > 0) ? _decrementCounter : null,
+                  child: Container(
+                      height: 35.h,
+                      width: 40.w,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Icon(Icons.remove)),
+                ),
+                Text('${value}', style: TextStyle(color: Colors.white)),
+                InkWell(
+                  onTap: _incrementCounter,
+                  child: Container(
+                      height: 35.h,
+                      width: 40.w,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Icon(Icons.add)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
 
-  Widget _formMenu() {
-    return TextFormField(
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+  Widget _formDescription() => TextFormField(
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+          ),
+          border: new OutlineInputBorder(
+              borderSide: new BorderSide(
+            color: Color.fromARGB(255, 235, 240, 255),
+          )),
+          hintText: 'Keterangan',
+          hintStyle: TextStyle(
+            color: Color.fromARGB(255, 144, 152, 177),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+          ),
         ),
-        border: new OutlineInputBorder(
-            borderSide: new BorderSide(
-          color: Color.fromARGB(255, 235, 240, 255),
-        )),
-        hintText: 'Menu',
-        hintStyle: TextStyle(
-          color: Color.fromARGB(255, 144, 152, 177),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
+        minLines: 10,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+      );
+
+  Widget _formMenu() => TextFormField(
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+          ),
+          border: new OutlineInputBorder(
+              borderSide: new BorderSide(
+            color: Color.fromARGB(255, 235, 240, 255),
+          )),
+          hintText: 'Menu',
+          hintStyle: TextStyle(
+            color: Color.fromARGB(255, 144, 152, 177),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+          ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget _formOutlet() {
-    return TextFormField(
-      decoration: outlet,
-      style: textFormStyle,
-    );
-  }
+  Widget _formOutlet() => TextFormField(
+        decoration: outlet,
+        style: textFormStyle,
+      );
 
-  Widget _formGuest() {
-    return TextFormField(
-      decoration: tamu,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
-      ],
-      style: textFormStyle,
-    );
-  }
+  Widget _formGuest() => TextFormField(
+        decoration: tamu,
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        style: textFormStyle,
+      );
 
   Future PickDate(BuildContext context) async {
     final initialDate = DateTime.now();

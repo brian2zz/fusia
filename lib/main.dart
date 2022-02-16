@@ -19,6 +19,8 @@ import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
 import 'package:fusia/view/voucher/voucher_home.dart';
 
+import 'view/reservation/reservation_history.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());

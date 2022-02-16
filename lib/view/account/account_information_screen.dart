@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
 import 'package:fusia/view/account/change_password_page.dart';
+// import 'package:fusia/widget/custom_appbar.dart';
 import 'package:fusia/widget/custom_appbar_account.dart';
 import 'package:get/get.dart';
 
@@ -15,10 +16,31 @@ class AccountInformation extends StatelessWidget {
   const AccountInformation({Key? key}) : super(key: key);
 
   @override
+  // Widget appBar() => CustomAppBar(title: "Promo", isAccessDetail: false);
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'Account Information'),
       body: body(),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: FlatButton(
+            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 40.w),
+            color: Color.fromARGB(255, 80, 36, 35),
+            onPressed: () {},
+            child: Text(
+              'Save',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.sp,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -56,7 +78,7 @@ class _bodyState extends State<body> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: FutureBuilder(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -67,28 +89,12 @@ class _bodyState extends State<body> {
               children: <Widget>[
                 _avatarProfile(),
                 SizedBox(
-                  height: 60,
+                  height: 60.h,
                 ),
                 _formEditAccount(DataUser),
-                SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 _changePassword(context),
-                SizedBox(height: 25),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: FlatButton(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                    color: Color.fromARGB(255, 80, 36, 35),
-                    onPressed: () {},
-                    child: Text(
-                      'Save',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+                SizedBox(height: 25.h),
               ],
             );
           } else {
@@ -99,124 +105,119 @@ class _bodyState extends State<body> {
     );
   }
 
-  Widget _formEditAccount(DataUser) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-          label: 'Email',
-        ),
-        SizedBox(height: 10),
-        textField(
-          textController: DataUser[1]['value'],
-        ),
-        SizedBox(height: 10),
-        Label(
-          label: 'Phone Number',
-        ),
-        SizedBox(height: 10),
-        textField(
-          textController: DataUser[3]['value'],
-        ),
-        SizedBox(height: 10),
-        Label(
-          label: 'Birthday',
-        ),
-        SizedBox(height: 10),
-        _birthdayInput(DataUser),
-      ],
-    );
-  }
+  Widget _formEditAccount(DataUser) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+            label: 'Email',
+          ),
+          SizedBox(height: 10.h),
+          textField(
+            textController: DataUser[1]['value'],
+          ),
+          SizedBox(height: 10.h),
+          Label(
+            label: 'Phone Number',
+          ),
+          SizedBox(height: 10.h),
+          textField(
+            textController: DataUser[3]['value'],
+          ),
+          SizedBox(height: 10.h),
+          Label(
+            label: 'Birthday',
+          ),
+          SizedBox(height: 10.h),
+          _birthdayInput(DataUser),
+        ],
+      );
 
-  Widget _birthdayInput(DataUser) {
-    return TextFormField(
-      onTap: () => PickDate(context),
-      decoration: InputDecoration(
-        suffixIcon: Icon(
-          Icons.date_range_outlined,
+  Widget _birthdayInput(DataUser) => TextFormField(
+        onTap: () => PickDate(context),
+        decoration: InputDecoration(
+          suffixIcon: Icon(
+            Icons.date_range_outlined,
+            color: Color.fromARGB(255, 144, 152, 177),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+          ),
+          border: new OutlineInputBorder(
+              borderSide: new BorderSide(
+            color: Color.fromARGB(255, 235, 240, 255),
+          )),
+        ),
+        controller: TextEditingController(
+            text: (dateBirthday() == null)
+                ? DataUser[2]['value']
+                : dateBirthday()),
+        style: TextStyle(
           color: Color.fromARGB(255, 144, 152, 177),
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Poppins',
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
-        ),
-        border: new OutlineInputBorder(
-            borderSide: new BorderSide(
-          color: Color.fromARGB(255, 235, 240, 255),
-        )),
-      ),
-      controller: TextEditingController(
-          text:
-              (dateBirthday() == null) ? DataUser[2]['value'] : dateBirthday()),
-      style: TextStyle(
-        color: Color.fromARGB(255, 144, 152, 177),
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Poppins',
-      ),
-    );
-  }
+      );
 
   Future PickDate(BuildContext context) async {
     final initialDate = DateTime.now();
     final newDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(DateTime.now().year - 5),
+        firstDate: DateTime(DateTime.now().year - 70),
         lastDate: DateTime(DateTime.now().year + 5));
     if (newDate == null) return;
     setState(() => date = newDate);
   }
 
-  Widget _changePassword(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) {
-            return ChangePassword();
-          }),
-        );
-      },
-      leading: Icon(Icons.lock_outline, color: Color.fromARGB(255, 34, 50, 99)),
-      title: Text(
-        'Change Password        *****************',
-        style: TextStyle(
-          color: Color.fromARGB(255, 34, 50, 99),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
-        ),
-      ),
-      trailing: Icon(Icons.arrow_forward_ios),
-    );
-  }
-
-  Widget _avatarProfile() {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 60),
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+  Widget _changePassword(BuildContext context) => ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return ChangePassword();
+            }),
+          );
+        },
+        leading:
+            Icon(Icons.lock_outline, color: Color.fromARGB(255, 34, 50, 99)),
+        title: Text(
+          'Change Password        *****************',
+          style: TextStyle(
+            color: Color.fromARGB(255, 34, 50, 99),
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
           ),
-          SizedBox(height: 25),
-          InkWell(
-            onTap: () {},
-            child: Text(
-              'Ubah Photo Profile',
-              style: TextStyle(
-                color: Color.fromARGB(255, 34, 50, 99),
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-                decoration: TextDecoration.underline,
+        ),
+        trailing: Icon(Icons.arrow_forward_ios),
+      );
+
+  Widget _avatarProfile() => Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 60.h),
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(
+                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+            ),
+            SizedBox(height: 25.h),
+            InkWell(
+              onTap: () {},
+              child: Text(
+                'Ubah Photo Profile',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 34, 50, 99),
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }
 
 class textField extends StatelessWidget {

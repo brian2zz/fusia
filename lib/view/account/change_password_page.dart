@@ -23,38 +23,38 @@ class body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.h),
       child: ListView(
         children: [
-          SizedBox(height: 40),
+          SizedBox(height: 40.h),
           Label(
             text: 'Old Password',
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 10.h),
           textField(
             Hint: '****************',
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 40.h),
           Label(
             text: 'New Password',
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 10.h),
           textField(
             Hint: '****************',
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 40.h),
           Label(
             text: 'New Password Again',
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 10.h),
           textField(
             Hint: '****************',
           ),
-          SizedBox(height: 25),
+          SizedBox(height: 25.h),
           ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: FlatButton(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 40.h),
               color: Color.fromARGB(255, 80, 36, 35),
               onPressed: () {},
               child: Text(
@@ -62,7 +62,7 @@ class body extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 20.sp,
                 ),
               ),
             ),

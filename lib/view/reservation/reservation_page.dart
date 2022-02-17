@@ -117,9 +117,9 @@ class _reservationState extends State<reservation> {
         ),
       );
 
-  Widget _body(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+  Widget _body(BuildContext context) => Container(
         child: new SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: _formReservation(context),
         ),
       );

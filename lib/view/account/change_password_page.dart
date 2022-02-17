@@ -23,8 +23,8 @@ class body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.h),
       child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20.h),
         children: [
           SizedBox(height: 40.h),
           Label(

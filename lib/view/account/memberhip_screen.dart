@@ -47,11 +47,11 @@ class _bodyState extends State<body> {
       print(e.toString());
     }
   }
+
   double value = 0;
 
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: FutureBuilder(
           future: getData(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -59,6 +59,7 @@ class _bodyState extends State<body> {
               var DataUser =
                   snapshot.data['item'][3]['request']['body']['formdata'];
               return ListView(
+                padding: EdgeInsets.symmetric(horizontal: 20.h),
                 children: [
                   _stepper(),
                   SizedBox(height: 30.h),

@@ -27,29 +27,27 @@ class reservationHistory extends StatelessWidget {
   }
 
   Widget _body(BuildContext context) => Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
-          child: ListView(children: [
-            ListReservationHistory(
-              title: 'Nasi Timbel 1',
+        child:
+            ListView(padding: EdgeInsets.symmetric(vertical: 20.h), children: [
+          ListReservationHistory(
+            title: 'Nasi Timbel 1',
+            sub:
+                'Purus scelerisque arcu convallis sit ornare. Vel aliquet est nisi, bibendum',
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return reservationDetail();
+                }),
+              );
+            },
+          ),
+          ListReservationHistory(
+              title: 'Food Delivery',
               sub:
                   'Purus scelerisque arcu convallis sit ornare. Vel aliquet est nisi, bibendum',
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return reservationDetail();
-                  }),
-                );
-              },
-            ),
-            ListReservationHistory(
-                title: 'Food Delivery',
-                sub:
-                    'Purus scelerisque arcu convallis sit ornare. Vel aliquet est nisi, bibendum',
-                press: () {}),
-          ]),
-        ),
+              press: () {}),
+        ]),
       );
 }
 

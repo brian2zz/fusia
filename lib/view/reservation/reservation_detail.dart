@@ -57,10 +57,10 @@ class reservationDetail extends StatelessWidget {
   }
 
   Widget _body() => Container(
-        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
         child: Column(
           children: [
             new SingleChildScrollView(
+              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

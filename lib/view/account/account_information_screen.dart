@@ -78,7 +78,6 @@ class _bodyState extends State<body> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: FutureBuilder(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -86,6 +85,7 @@ class _bodyState extends State<body> {
             var DataUser =
                 snapshot.data['item'][3]['request']['body']['formdata'];
             return ListView(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               children: <Widget>[
                 _avatarProfile(),
                 SizedBox(

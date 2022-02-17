@@ -20,6 +20,7 @@ class BuildCardMember extends StatelessWidget {
                   point: point,
                   name: name,
                   tier: 'Bronze',
+                  medal: AssetImage('./assets/images/Medal_Bronze.png'),
                   color: LinearGradient(
                       colors: [Color(0xFFDEC598), Color(0xFFBC9B68)]),
                 )
@@ -28,6 +29,7 @@ class BuildCardMember extends StatelessWidget {
                       point: point,
                       name: name,
                       tier: 'Gold',
+                      medal: AssetImage('./assets/images/Medal_Gold.png'),
                       color: LinearGradient(colors: [
                         Color.fromARGB(255, 254, 201, 25),
                         Color.fromARGB(255, 228, 161, 18),
@@ -38,6 +40,8 @@ class BuildCardMember extends StatelessWidget {
                           point: point,
                           name: name,
                           tier: 'Platinum',
+                          medal:
+                              AssetImage('./assets/images/Medal_Platinum.png'),
                           color: LinearGradient(colors: [
                             Color.fromARGB(255, 166, 166, 166),
                             Color.fromARGB(255, 108, 108, 108),
@@ -47,6 +51,7 @@ class BuildCardMember extends StatelessWidget {
                           point: point,
                           name: name,
                           tier: "Vvip",
+                          medal: AssetImage('./assets/images/Medal_Vvip.png'),
                           color: LinearGradient(colors: [
                             Color.fromARGB(255, 152, 144, 227),
                             Color.fromARGB(255, 177, 244, 207),
@@ -65,8 +70,10 @@ class CardMember extends StatelessWidget {
     required this.name,
     required this.tier,
     required this.color,
+    required this.medal,
   }) : super(key: key);
 
+  final AssetImage medal;
   final double point;
   final String name;
   final String tier;
@@ -125,8 +132,8 @@ class CardMember extends StatelessWidget {
                 width: 37.w,
                 child: FittedBox(
                   fit: BoxFit.cover,
-                  child: Image.asset(
-                    'assets/icons/ic_medal.png',
+                  child: Image(
+                    image: medal,
                   ),
                 ),
               ),

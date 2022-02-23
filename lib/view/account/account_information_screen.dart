@@ -1,164 +1,239 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/controller/dashboard_controller.dart';
+import 'package:fusia/controller/login_controller.dart';
+import 'package:fusia/model/data_account_model.dart';
 import 'package:fusia/view/account/change_password_page.dart';
-// import 'package:fusia/widget/custom_appbar.dart';
 import 'package:fusia/widget/custom_appbar_account.dart';
 import 'package:get/get.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-class AccountInformation extends StatelessWidget {
+TextStyle textFormStyle = TextStyle(
+  color: Color.fromARGB(255, 144, 152, 177),
+  fontWeight: FontWeight.bold,
+  fontFamily: 'Poppins',
+);
+
+class AccountInformation extends StatefulWidget {
   const AccountInformation({Key? key}) : super(key: key);
 
   @override
-  // Widget appBar() => CustomAppBar(title: "Promo", isAccessDetail: false);
+  _AccountInformationState createState() => _AccountInformationState();
+}
+
+class _AccountInformationState extends State<AccountInformation> {
+  //controller
+  LoginController? userController;
+  DashboardController? dashboardController;
+
+  //global variable
+
+  var userToken;
+  var customerId;
+  var namaUser;
+  var emailUser;
+  var phoneUser;
+  var tanggalLahirUser;
+  var photoUrlUser;
+  var membershipUser;
+
+  @override
+  initState() {
+    super.initState();
+
+    initConstructor();
+    initData();
+  }
+
+  initConstructor() {
+    userController = Get.put(LoginController());
+    dashboardController = Get.put(DashboardController());
+
+    namaUser = "".obs;
+    emailUser = "".obs;
+    phoneUser = "".obs;
+    tanggalLahirUser = "".obs;
+  }
+
+  initData() async {
+    await userController!.retrieveUserLocalData();
+
+    setState(() {
+      var token = LoginController.userToken.value;
+      var customerId = LoginController.customerId.value;
+
+      retrieveDashboard(token, customerId);
+    });
+  }
+
+  retrieveDashboard(token, customerId) async {
+    var result =
+        await dashboardController!.retrieveDashboard(token, customerId);
+
+    setState(() {
+      if (result['status'] == 200) {
+        DataAccountModel responsedata =
+            DataAccountModel.fromJson(result['details']['databody']);
+
+        namaUser.value = responsedata.custNama;
+        tanggalLahirUser.value = responsedata.custTgllahir;
+        phoneUser.value = responsedata.custHp;
+        emailUser.value = responsedata.custEmail;
+      }
+    });
+  }
+
+  DateTime? date;
+  String Birthday() {
+    if (date == null) {
+      return tanggalLahirUser.value;
+    } else {
+      return DateFormat('dd-MM-yyyy').format(date!);
+    }
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'Account Information'),
-      body: body(),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: FlatButton(
-            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 40.w),
-            color: Color.fromARGB(255, 80, 36, 35),
-            onPressed: () {},
-            child: Text(
-              'Save',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 20.sp,
-              ),
-            ),
-          ),
-        ),
-      ),
+      body: _body(context),
     );
   }
-}
 
-class body extends StatefulWidget {
-  const body({Key? key}) : super(key: key);
-
-  @override
-  _bodyState createState() => _bodyState();
-}
-
-class _bodyState extends State<body> {
-  getData() async {
-    try {
-      var response = await http.get(Uri.parse(
-          "https://www.postman.com/collections/e9afc80dca54635d1ef9"));
-      if (response.statusCode == 200) {
-        var jsonData = jsonDecode(response.body);
-        return jsonData;
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  DateTime? date;
-  String? dateBirthday() {
-    if (date == null) {
-      return null;
-    } else {
-      return DateFormat('yyyy-MM-dd').format(date!);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _body(BuildContext context) {
     return Container(
-      child: FutureBuilder(
-        future: getData(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            var DataUser =
-                snapshot.data['item'][3]['request']['body']['formdata'];
-            return ListView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              children: <Widget>[
-                _avatarProfile(),
-                SizedBox(
-                  height: 60.h,
-                ),
-                _formEditAccount(DataUser),
-                SizedBox(height: 20.h),
-                _changePassword(context),
-                SizedBox(height: 25.h),
-              ],
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _formEditAccount(DataUser) => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        children: <Widget>[
+          _avatarProfile(),
+          SizedBox(
+            height: 60,
+          ),
           Label(
             label: 'Email',
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           textField(
-            textController: DataUser[1]['value'],
+            textController: emailUser.value,
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           Label(
             label: 'Phone Number',
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           textField(
-            textController: DataUser[3]['value'],
+            textController: phoneUser.value,
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           Label(
             label: 'Birthday',
           ),
-          SizedBox(height: 10.h),
-          _birthdayInput(DataUser),
+          SizedBox(height: 10),
+          _birthday(context),
+          SizedBox(height: 20),
+          _changePassword(context),
+          SizedBox(height: 25),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: FlatButton(
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              color: Color.fromARGB(255, 80, 36, 35),
+              onPressed: () {},
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
         ],
-      );
+      ),
+    );
+  }
 
-  Widget _birthdayInput(DataUser) => TextFormField(
-        onTap: () => PickDate(context),
-        decoration: InputDecoration(
-          suffixIcon: Icon(
-            Icons.date_range_outlined,
-            color: Color.fromARGB(255, 144, 152, 177),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
-          ),
-          border: new OutlineInputBorder(
-              borderSide: new BorderSide(
-            color: Color.fromARGB(255, 235, 240, 255),
-          )),
+  Widget _birthday(BuildContext context) {
+    return TextFormField(
+      onTap: () => PickDate(context),
+      decoration: InputDecoration(
+        suffixIcon: Icon(
+          Icons.date_range_outlined,
+          color: Color.fromARGB(255, 144, 152, 177),
         ),
-        controller: TextEditingController(
-            text: (dateBirthday() == null)
-                ? DataUser[2]['value']
-                : dateBirthday()),
-        style: TextStyle(
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+        ),
+        border: new OutlineInputBorder(
+            borderSide: new BorderSide(
+          color: Color.fromARGB(255, 235, 240, 255),
+        )),
+        hintText: 'Tanggal Lahir',
+        hintStyle: TextStyle(
           color: Color.fromARGB(255, 144, 152, 177),
           fontWeight: FontWeight.bold,
           fontFamily: 'Poppins',
         ),
-      );
+      ),
+      controller: TextEditingController(text: Birthday()),
+      style: textFormStyle,
+    );
+  }
+
+  Widget _changePassword(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return ChangePassword();
+          }),
+        );
+      },
+      leading: Icon(Icons.lock_outline, color: Color.fromARGB(255, 34, 50, 99)),
+      title: Text(
+        'Change Password        *****************',
+        style: TextStyle(
+          color: Color.fromARGB(255, 34, 50, 99),
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Poppins',
+        ),
+      ),
+      trailing: Icon(Icons.arrow_forward_ios),
+    );
+  }
+
+  Widget _avatarProfile() {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 60),
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: NetworkImage(
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+          ),
+          SizedBox(height: 25),
+          InkWell(
+            onTap: () {},
+            child: Text(
+              'Ubah Photo Profile',
+              style: TextStyle(
+                color: Color.fromARGB(255, 34, 50, 99),
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Future PickDate(BuildContext context) async {
     final initialDate = DateTime.now();
@@ -170,54 +245,6 @@ class _bodyState extends State<body> {
     if (newDate == null) return;
     setState(() => date = newDate);
   }
-
-  Widget _changePassword(BuildContext context) => ListTile(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return ChangePassword();
-            }),
-          );
-        },
-        leading:
-            Icon(Icons.lock_outline, color: Color.fromARGB(255, 34, 50, 99)),
-        title: Text(
-          'Change Password        *****************',
-          style: TextStyle(
-            color: Color.fromARGB(255, 34, 50, 99),
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
-          ),
-        ),
-        trailing: Icon(Icons.arrow_forward_ios),
-      );
-
-  Widget _avatarProfile() => Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 60.h),
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
-            ),
-            SizedBox(height: 25.h),
-            InkWell(
-              onTap: () {},
-              child: Text(
-                'Ubah Photo Profile',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 34, 50, 99),
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
 }
 
 class textField extends StatelessWidget {
@@ -240,11 +267,7 @@ class textField extends StatelessWidget {
         )),
       ),
       controller: TextEditingController(text: textController),
-      style: TextStyle(
-        color: Color.fromARGB(255, 144, 152, 177),
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Poppins',
-      ),
+      style: textFormStyle,
     );
   }
 }

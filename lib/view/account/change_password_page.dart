@@ -24,37 +24,31 @@ class body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 20.h),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
-          SizedBox(height: 40.h),
+          SizedBox(height: 40),
           Label(
             text: 'Old Password',
           ),
-          SizedBox(height: 10.h),
-          textField(
-            Hint: '****************',
-          ),
-          SizedBox(height: 40.h),
+          SizedBox(height: 10),
+          textField(),
+          SizedBox(height: 40),
           Label(
             text: 'New Password',
           ),
-          SizedBox(height: 10.h),
-          textField(
-            Hint: '****************',
-          ),
-          SizedBox(height: 40.h),
+          SizedBox(height: 10),
+          textField(),
+          SizedBox(height: 40),
           Label(
             text: 'New Password Again',
           ),
-          SizedBox(height: 10.h),
-          textField(
-            Hint: '****************',
-          ),
-          SizedBox(height: 25.h),
+          SizedBox(height: 10),
+          textField(),
+          SizedBox(height: 25),
           ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: FlatButton(
-              padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 40.h),
+              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               color: Color.fromARGB(255, 80, 36, 35),
               onPressed: () {},
               child: Text(
@@ -62,7 +56,7 @@ class body extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
+                  fontSize: 20,
                 ),
               ),
             ),
@@ -74,10 +68,8 @@ class body extends StatelessWidget {
 }
 
 class textField extends StatelessWidget {
-  final String Hint;
   const textField({
     Key? key,
-    required this.Hint,
   }) : super(key: key);
 
   @override
@@ -88,12 +80,6 @@ class textField extends StatelessWidget {
         prefixIcon: Icon(
           Icons.lock_outlined,
           color: Color.fromARGB(255, 144, 152, 177),
-        ),
-        hintText: Hint,
-        hintStyle: TextStyle(
-          color: Color.fromARGB(255, 144, 152, 177),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
         ),
         border: new OutlineInputBorder(
             borderSide: new BorderSide(

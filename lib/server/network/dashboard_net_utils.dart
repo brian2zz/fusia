@@ -5,27 +5,20 @@ import 'package:http/http.dart' as http;
 
 class DashboardNetUtils {
 
-  static var serverUrl = "http://dev.koffiesoft.com/fusia";
+  static var serverUrl = "http://dev.koffiesoft.com/fusia_test";
 
   static var durationlimit = const Duration(seconds: 30);
 
   retrieveHomeDashboard(token,customerId) async {
     print(token);
-    final String path = "$serverUrl/index.php?c=c_customer&m=customer_app_list";
+    var path = "$serverUrl/index.php?c=c_customer&m=customer_app_list&cust_id=$customerId";
 
-    var response;
-
-    Map<String,dynamic> map = {
-      "cust_id": int.parse(customerId),
-    };
-
-    response = await http.post(
+    var response = await http.get(
       Uri.parse(path),
       headers: {
         "content-type": "application/json",
         "Authorization": "Bearer $token",
       },
-      body: jsonEncode(map),
     );
 
     print(json.decode(response.body));

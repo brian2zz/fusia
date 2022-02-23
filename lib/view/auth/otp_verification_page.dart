@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/controller/login_controller.dart';
-import 'package:fusia/model/verify_otp_status_model.dart';
 import 'package:fusia/server/arguments_pass/temp_pass_otp.dart';
 import 'package:fusia/widget/custom_progress_loading.dart';
 import 'package:fusia/widget/custom_toast.dart';
@@ -163,8 +162,6 @@ verifyAccount1(phone, code,context,controller) async {
     var result = await controller.verifyOTPController(phone, code);
     //showToast(context, result['details']);
     if (result['status'] == 200) {
-      VerifyOtpStatus responsedata =
-          VerifyOtpStatus.fromJson(result['details']);
       hidedialog(context);
       Navigator.of(context).pushNamed('/navigation');
     }
@@ -176,11 +173,9 @@ Widget _buildPinText(
     showdialog(context);
     var result = await controller.verifyOTPController(phone, code);
     if (result['status'] == 200) {
-      VerifyOtpStatus responsedata =
-          VerifyOtpStatus.fromJson(result['details']);
       hidedialog(context);
 
-      controller.storedUserLocalData("true",result['details']['token'], result['details']['cust_id']);
+      controller.storedUserLocalData("true",result['details']['databody']['token'], result['details']['databody']['cust_id'].toString());
 
       Navigator.of(context).pushNamed('/navigation');
     }

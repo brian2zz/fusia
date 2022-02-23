@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fusia/view/account/account_page.dart';
+//import 'package:fusia/view/outlet/outlet_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
-import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/widget/custom_toast.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../color/colors_theme.dart';
 import 'home_dashboard_page.dart';
+import 'outlet/outlet_page.dart';
 
 class HomeNavigationMenu extends StatefulWidget {
   const HomeNavigationMenu({Key? key}) : super(key: key);

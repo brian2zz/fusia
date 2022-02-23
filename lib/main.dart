@@ -12,14 +12,14 @@ import 'package:fusia/view/auth/register_page.dart';
 import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/home_navigation_menu_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
+import 'package:fusia/view/outlet/outlet_page.dart';
 import 'package:fusia/view/promo/detail_promo_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
-import 'package:fusia/view/reservation/reservation_page.dart';
-import 'package:fusia/view/reward/reward_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
-import 'package:fusia/view/voucher/voucher_home.dart';
+import 'package:fusia/view/voucher/voucher_page.dart';
 
 import 'view/reservation/reservation_history.dart';
+import 'view/voucher/voucher_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                   child: widget!);
             },
-            home: const reservation(),
+            home: const SplashScreen(),
             routes: {
               '/navigation': (BuildContext context) =>
                   const HomeNavigationMenu(),
@@ -70,7 +70,7 @@ class _MyAppState extends State<MyApp> {
               '/register': (BuildContext context) => const RegisterPage(),
               '/verification': (BuildContext context) =>
                   const OtpVerification(),
-              '/vouchers': (BuildContext context) => VoucherHome(),
+              // '/vouchers': (BuildContext context) => home(),
               '/membership': (BuildContext context) => const membership(),
               '/editaccount': (BuildContext context) =>
                   const AccountInformation(),

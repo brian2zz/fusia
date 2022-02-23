@@ -6,12 +6,14 @@ class CustomItemCard extends StatefulWidget {
   final String imageItem;
   final String description;
   final String imageShopItem;
+  final bool isProductHome;
 
   const CustomItemCard(
       {Key? key,
       required this.imageItem,
       required this.description,
-      required this.imageShopItem})
+      required this.imageShopItem,
+      required this.isProductHome})
       : super(key: key);
 
   @override
@@ -90,7 +92,7 @@ class _CustomItemCardState extends State<CustomItemCard> {
                 ),
                 splashColor: ColorsTheme.primary!.withOpacity(0.14),
                 child: Container(
-                  padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+                  padding: EdgeInsets.only(top: (widget.isProductHome) ? 14.5.h : 15.h, bottom: (widget.isProductHome) ? 14.5.h : 15.h),
                   child: Center(
                     child: Text("Details", style: itemProductTextStyle(true)),
                   ),

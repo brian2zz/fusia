@@ -40,14 +40,14 @@ class _PromoPageState extends State<PromoPage> {
 
     Widget itemPromoGridList() => Expanded(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(17.h, 20.h, 17.w, 5.h),
+            padding: EdgeInsets.fromLTRB(17.w, 20.h, 17.w, 20.h),
             child: GridView.builder(
               itemCount: 8,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 295.h,
+                maxCrossAxisExtent: 276.h,
                 crossAxisSpacing: 19.w,
-                mainAxisSpacing: 30.h,
-                childAspectRatio: 6.0.h / 8.0.h,
+                mainAxisSpacing: 10.h,
+                childAspectRatio: 3.3.h / 5.4.h,
               ),
               shrinkWrap: true,
               itemBuilder: (context, index) => const CustomItemCard(
@@ -55,6 +55,7 @@ class _PromoPageState extends State<PromoPage> {
                 description:
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet elit volutpat et massa",
                 imageShopItem: 'assets/images/logo_onboarding_2.png',
+                isProductHome: false,
               ),
             ),
           ),

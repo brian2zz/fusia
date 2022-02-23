@@ -3,7 +3,7 @@ import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:http/http.dart' as http;
 
 class LoginNetUtils {
-  static var serverUrl = "http://dev.koffiesoft.com/fusia";
+  static var serverUrl = "http://dev.koffiesoft.com/fusia_test";
 
   static var durationlimit = const Duration(seconds: 30);
 

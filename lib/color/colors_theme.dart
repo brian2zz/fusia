@@ -12,4 +12,6 @@ class ColorsTheme {
   static Color? neutralDark = const Color(0xff223263);
   static Color? brown = const Color(0xff664D31);
   static Color? whiteCream = const Color(0xffEEEEEE);
+  static Color? lightBrown = const Color(0xffe3c9ab);
+  static Color? darkerBrown = const Color(0xffcfa36f);
 }

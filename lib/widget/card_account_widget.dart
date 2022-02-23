@@ -12,7 +12,7 @@ class BuildCardMember extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 10.h),
       child: Column(
         children: [
           (point >= 0 && point <= 125)
@@ -20,8 +20,8 @@ class BuildCardMember extends StatelessWidget {
                   point: point,
                   name: name,
                   tier: 'Bronze',
-                  medal: AssetImage('./assets/images/Medal_Bronze.png'),
-                  color: LinearGradient(
+                  medal: const AssetImage('assets/icons/ic_bronze_medal.png'),
+                  color: const LinearGradient(
                       colors: [Color(0xFFDEC598), Color(0xFFBC9B68)]),
                 )
               : (point > 125 && point <= 250)
@@ -29,8 +29,8 @@ class BuildCardMember extends StatelessWidget {
                       point: point,
                       name: name,
                       tier: 'Gold',
-                      medal: AssetImage('./assets/images/Medal_Gold.png'),
-                      color: LinearGradient(colors: [
+                      medal: const AssetImage('assets/icons/ic_gold_medal.png'),
+                      color: const LinearGradient(colors: [
                         Color.fromARGB(255, 254, 201, 25),
                         Color.fromARGB(255, 228, 161, 18),
                       ]),
@@ -40,9 +40,8 @@ class BuildCardMember extends StatelessWidget {
                           point: point,
                           name: name,
                           tier: 'Platinum',
-                          medal:
-                              AssetImage('./assets/images/Medal_Platinum.png'),
-                          color: LinearGradient(colors: [
+                          medal: const AssetImage('assets/icons/ic_silver_medal.png'),
+                          color: const LinearGradient(colors: [
                             Color.fromARGB(255, 166, 166, 166),
                             Color.fromARGB(255, 108, 108, 108),
                           ]),
@@ -51,8 +50,8 @@ class BuildCardMember extends StatelessWidget {
                           point: point,
                           name: name,
                           tier: "Vvip",
-                          medal: AssetImage('./assets/images/Medal_Vvip.png'),
-                          color: LinearGradient(colors: [
+                          medal: const AssetImage('assets/icons/ic_vvip_trophy.png'),
+                          color: const LinearGradient(colors: [
                             Color.fromARGB(255, 152, 144, 227),
                             Color.fromARGB(255, 177, 244, 207),
                           ]),
@@ -82,7 +81,7 @@ class CardMember extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 240.h,
+      height: 192.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         gradient: color,

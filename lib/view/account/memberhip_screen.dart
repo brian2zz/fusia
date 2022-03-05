@@ -89,13 +89,13 @@ class _bodyState extends State<body> {
 
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         children: [
           _stepper(),
-          SizedBox(height: 30),
+          SizedBox(height: 30.h),
           Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: EdgeInsets.only(top: 10.h),
             child: BuildCardMember(
               point: value,
               name: namaUser.value,
@@ -103,7 +103,7 @@ class _bodyState extends State<body> {
           ),
           _indicatorPoint(),
           _progressMembership(),
-          SizedBox(height: 60),
+          SizedBox(height: 60.h),
           Benefit(),
         ],
       ),
@@ -118,12 +118,12 @@ class _bodyState extends State<body> {
         Text(
           'Benefits',
           style: TextStyle(
-            color: Colors.black,
+            color: ColorsTheme.black,
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
           ),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 20.h),
         (value >= 0 && value <= 125)
             ? BuildBenefit(
                 text1:
@@ -170,9 +170,9 @@ class _bodyState extends State<body> {
           value: value,
           min: 0,
           max: 500,
-          activeColor: Color.fromARGB(255, 92, 97, 244),
-          inactiveColor: Color.fromARGB(255, 215, 215, 215),
-          thumbColor: Color.fromARGB(255, 92, 97, 244),
+          activeColor: ColorsTheme.lightDark,
+          inactiveColor: ColorsTheme.whiteCream,
+          thumbColor: ColorsTheme.lightDark,
           onChanged: (value) => setState(
             () {
               this.value = value;
@@ -187,7 +187,7 @@ class _bodyState extends State<body> {
                       ? "Gold"
                       : "Platinum",
               style: TextStyle(
-                color: Colors.black,
+                color: ColorsTheme.black,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Poppins',
               )),
@@ -198,7 +198,7 @@ class _bodyState extends State<body> {
                       ? "Platinum"
                       : "Vvip",
               style: TextStyle(
-                color: Colors.black,
+                color: ColorsTheme.black,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Poppins',
               )),
@@ -211,7 +211,7 @@ class _bodyState extends State<body> {
                       ? 'Earn 125 points more to reach Platinum tier'
                       : 'Earn 125 points more to reach Vvip tier',
               style: TextStyle(
-                color: Color.fromARGB(255, 215, 215, 215),
+                color: ColorsTheme.lightGrey,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Poppins',
               )),
@@ -224,13 +224,13 @@ class _bodyState extends State<body> {
     return ListTile(
       leading: Text('Your Point',
           style: TextStyle(
-            color: Colors.black,
+            color: ColorsTheme.black,
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
           )),
       trailing: Text('${(value).toStringAsFixed(0)}',
           style: TextStyle(
-            color: Colors.black,
+            color: ColorsTheme.black,
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
           )),
@@ -239,11 +239,10 @@ class _bodyState extends State<body> {
 
   Widget _stepper() {
     return Container(
-      height: 80,
+      height: 80.h,
       child: Theme(
         data: ThemeData(
-            colorScheme:
-                ColorScheme.light(primary: Color.fromARGB(255, 80, 36, 35))),
+            colorScheme: ColorScheme.light(primary: ColorsTheme.primary!)),
         child: Stepper(
           type: StepperType.horizontal,
           steps: [

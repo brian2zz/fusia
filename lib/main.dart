@@ -9,9 +9,11 @@ import 'package:fusia/view/account/memberhip_screen.dart';
 import 'package:fusia/view/auth/login_page.dart';
 import 'package:fusia/view/auth/otp_verification_page.dart';
 import 'package:fusia/view/auth/register_page.dart';
+import 'package:fusia/view/benefits/benefits.dart';
 import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/home_navigation_menu_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
+import 'package:fusia/view/outlet/detail_outlet_page.dart';
 import 'package:fusia/view/outlet/outlet_page.dart';
 import 'package:fusia/view/promo/detail_promo_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
@@ -70,13 +72,15 @@ class _MyAppState extends State<MyApp> {
               '/register': (BuildContext context) => const RegisterPage(),
               '/verification': (BuildContext context) =>
                   const OtpVerification(),
-              // '/vouchers': (BuildContext context) => home(),
+              '/vouchers': (BuildContext context) => VoucherPage(),
               '/membership': (BuildContext context) => const membership(),
               '/editaccount': (BuildContext context) =>
                   const AccountInformation(),
               '/changepassword': (BuildContext context) =>
                   const ChangePassword(),
               '/detailpromo': (BuildContext context) => DetailPromo(),
+              '/benefit': (BuildContext context) => const BenefitPage(),
+              '/detail_outlet': (BuildContext context) => DetailOutletPage(),
             },
           );
         });

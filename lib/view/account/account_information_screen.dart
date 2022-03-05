@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,13 +11,8 @@ import 'package:fusia/view/account/change_password_page.dart';
 import 'package:fusia/widget/custom_appbar_account.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
-TextStyle textFormStyle = TextStyle(
-  color: Color.fromARGB(255, 144, 152, 177),
-  fontWeight: FontWeight.bold,
-  fontFamily: 'Poppins',
-);
 
 class AccountInformation extends StatefulWidget {
   const AccountInformation({Key? key}) : super(key: key);
@@ -45,6 +41,9 @@ class _AccountInformationState extends State<AccountInformation> {
   initState() {
     super.initState();
 
+    focusNode1.addListener(onFocusChange1);
+    focusNode2.addListener(onFocusChange2);
+    focusNode3.addListener(onFocusChange3);
     initConstructor();
     initData();
   }
@@ -96,144 +95,217 @@ class _AccountInformationState extends State<AccountInformation> {
     }
   }
 
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Account Information'),
-      body: _body(context),
-    );
+  Color? textColor1 = ColorsTheme.grey;
+  Color? textColor2 = ColorsTheme.grey;
+  Color? textColor3 = ColorsTheme.grey;
+  final FocusNode focusNode1 = FocusNode();
+  final FocusNode focusNode2 = FocusNode();
+  final FocusNode focusNode3 = FocusNode();
+
+  void onFocusChange1() {
+    setState(() {
+      textColor1 = focusNode1.hasFocus ? null : ColorsTheme.grey;
+    });
   }
 
-  Widget _body(BuildContext context) {
-    return Container(
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        children: <Widget>[
-          _avatarProfile(),
-          SizedBox(
-            height: 60,
-          ),
-          Label(
-            label: 'Email',
-          ),
-          SizedBox(height: 10),
-          textField(
-            textController: emailUser.value,
-          ),
-          SizedBox(height: 10),
-          Label(
-            label: 'Phone Number',
-          ),
-          SizedBox(height: 10),
-          textField(
-            textController: phoneUser.value,
-          ),
-          SizedBox(height: 10),
-          Label(
-            label: 'Birthday',
-          ),
-          SizedBox(height: 10),
-          _birthday(context),
-          SizedBox(height: 20),
-          _changePassword(context),
-          SizedBox(height: 25),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: FlatButton(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              color: Color.fromARGB(255, 80, 36, 35),
-              onPressed: () {},
-              child: Text(
-                'Save',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+  void onFocusChange2() {
+    setState(() {
+      textColor2 = focusNode2.hasFocus ? null : ColorsTheme.grey;
+    });
+  }
+
+  void onFocusChange3() {
+    setState(() {
+      textColor3 = focusNode3.hasFocus ? null : ColorsTheme.grey;
+    });
+  }
+
+  @override
+  void dispose() {
+    focusNode1.removeListener(onFocusChange1);
+    focusNode2.removeListener(onFocusChange2);
+    focusNode3.removeListener(onFocusChange3);
+    super.dispose();
+  }
+
+  File? imageFile;
+  _OpenGallery() async {
+    var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = File(picture!.path);
+    });
+  }
+
+  _OpenCamera() async {
+    var picture = await ImagePicker().pickImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = File(picture!.path);
+    });
+  }
+
+  Future<void> _ShowDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                GestureDetector(
+                    child: Text("Gallery"),
+                    onTap: () {
+                      _OpenGallery();
+                    }),
+                Padding(padding: EdgeInsets.all(10)),
+                GestureDetector(
+                    child: Text("Camera"),
+                    onTap: () {
+                      _OpenCamera();
+                    }),
+              ],
+            ),
+          ));
+        });
+  }
+
+  Widget build(BuildContext context) => Scaffold(
+        appBar: appBar(title: 'Account Information'),
+        body: _body(context),
+      );
+
+  Widget _body(BuildContext context) => Container(
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          children: <Widget>[
+            _AvatarProfile(),
+            SizedBox(
+              height: 60.h,
+            ),
+            Label(
+              label: 'Email',
+            ),
+            SizedBox(height: 10.h),
+            TextFieldWidget(
+                focusNode: focusNode1,
+                textController: emailUser.value,
+                textColor: textColor1),
+            SizedBox(height: 10.h),
+            Label(
+              label: 'Phone Number',
+            ),
+            SizedBox(height: 10.h),
+            TextFieldWidget(
+                focusNode: focusNode2,
+                textController: phoneUser.value,
+                textColor: textColor2),
+            SizedBox(height: 10.h),
+            Label(
+              label: 'Birthday',
+            ),
+            SizedBox(height: 10.h),
+            _Birthday(context),
+            SizedBox(height: 20.h),
+            _ChangePassword(context),
+            SizedBox(height: 25.h),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: FlatButton(
+                padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 40.w),
+                color: ColorsTheme.primary,
+                onPressed: () {},
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.sp,
+                  ),
                 ),
               ),
             ),
+            SizedBox(height: 25.h),
+          ],
+        ),
+      );
+
+  Widget _Birthday(BuildContext context) => TextField(
+        onTap: () => PickDate(context),
+        focusNode: focusNode3,
+        decoration: InputDecoration(
+          suffixIcon: Icon(
+            Icons.date_range_outlined,
+            color: ColorsTheme.grey,
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _birthday(BuildContext context) {
-    return TextFormField(
-      onTap: () => PickDate(context),
-      decoration: InputDecoration(
-        suffixIcon: Icon(
-          Icons.date_range_outlined,
-          color: Color.fromARGB(255, 144, 152, 177),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorsTheme.neutralDark!),
+          ),
+          border: new OutlineInputBorder(
+              borderSide: new BorderSide(
+            color: ColorsTheme.whiteCream!,
+          )),
+          hintText: 'Tanggal Lahir',
+          hintStyle: TextStyle(
+            color: ColorsTheme.grey,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
+          ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
-        ),
-        border: new OutlineInputBorder(
-            borderSide: new BorderSide(
-          color: Color.fromARGB(255, 235, 240, 255),
-        )),
-        hintText: 'Tanggal Lahir',
-        hintStyle: TextStyle(
-          color: Color.fromARGB(255, 144, 152, 177),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
-        ),
-      ),
-      controller: TextEditingController(text: Birthday()),
-      style: textFormStyle,
-    );
-  }
-
-  Widget _changePassword(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) {
-            return ChangePassword();
-          }),
-        );
-      },
-      leading: Icon(Icons.lock_outline, color: Color.fromARGB(255, 34, 50, 99)),
-      title: Text(
-        'Change Password        *****************',
+        controller: TextEditingController(text: Birthday()),
         style: TextStyle(
-          color: Color.fromARGB(255, 34, 50, 99),
+          color: textColor3,
           fontWeight: FontWeight.bold,
           fontFamily: 'Poppins',
         ),
-      ),
-      trailing: Icon(Icons.arrow_forward_ios),
-    );
-  }
+      );
 
-  Widget _avatarProfile() {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 60),
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+  Widget _ChangePassword(BuildContext context) => ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return ChangePassword();
+            }),
+          );
+        },
+        leading: Icon(Icons.lock_outline, color: ColorsTheme.neutralDark),
+        title: Text(
+          'Change Password        *****************',
+          style: TextStyle(
+            color: ColorsTheme.neutralDark,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins',
           ),
-          SizedBox(height: 25),
-          InkWell(
-            onTap: () {},
-            child: Text(
-              'Ubah Photo Profile',
-              style: TextStyle(
-                color: Color.fromARGB(255, 34, 50, 99),
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-                decoration: TextDecoration.underline,
+        ),
+        trailing: Icon(Icons.arrow_forward_ios),
+      );
+
+  Widget _AvatarProfile() => Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 60.h),
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(
+                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+            ),
+            SizedBox(height: 25.h),
+            InkWell(
+              onTap: () {
+                _ShowDialog(context);
+              },
+              child: Text(
+                'Ubah Photo Profile',
+                style: TextStyle(
+                  color: ColorsTheme.neutralDark,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   Future PickDate(BuildContext context) async {
     final initialDate = DateTime.now();
@@ -247,27 +319,39 @@ class _AccountInformationState extends State<AccountInformation> {
   }
 }
 
-class textField extends StatelessWidget {
-  final String textController;
-  const textField({
+class TextFieldWidget extends StatelessWidget {
+  const TextFieldWidget({
     Key? key,
+    required this.focusNode,
     required this.textController,
+    required this.textColor,
   }) : super(key: key);
+
+  final FocusNode focusNode;
+  final String textController;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      focusNode: focusNode,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Color.fromARGB(255, 34, 50, 99)),
+          borderSide: BorderSide(color: ColorsTheme.neutralDark!),
         ),
         border: new OutlineInputBorder(
             borderSide: new BorderSide(
-          color: Color.fromARGB(255, 235, 240, 255),
+          color: ColorsTheme.whiteCream!,
         )),
       ),
-      controller: TextEditingController(text: textController),
-      style: textFormStyle,
+      controller: TextEditingController(
+        text: textController,
+      ),
+      style: TextStyle(
+        color: textColor,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Poppins',
+      ),
     );
   }
 }
@@ -284,7 +368,7 @@ class Label extends StatelessWidget {
     return Text(
       label,
       style: TextStyle(
-        color: Color.fromARGB(255, 34, 50, 99),
+        color: ColorsTheme.neutralDark,
         fontWeight: FontWeight.bold,
         fontFamily: 'Poppins',
       ),

@@ -72,7 +72,6 @@ class _PromoPageState extends State<PromoPage> {
       child: SafeArea(
         child: Scaffold(
           body: body(),
-          resizeToAvoidBottomInset: false,
         ),
       ),
       value: SystemUiOverlayStyle(statusBarColor: ColorsTheme.primary),

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/view/voucher/appBar.dart';
 
-class benefits extends StatefulWidget {
-  benefits({Key? key}) : super(key: key);
+class BenefitPage extends StatefulWidget {
+  const BenefitPage({Key? key}) : super(key: key);
 
   @override
-  State<benefits> createState() => _benefitsState();
+  State<BenefitPage> createState() => _BenefitPageState();
 }
 
-class _benefitsState extends State<benefits> {
+class _BenefitPageState extends State<BenefitPage> {
   TextStyle header1 = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 16.sp,

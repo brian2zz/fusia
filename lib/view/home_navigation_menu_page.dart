@@ -135,6 +135,7 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
           elevation: 0.h,
         ),
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         child: Padding(
@@ -165,7 +166,9 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
         currentBackPressedTime = now;
       });
 
-      showToast(context, "Tekan sekali lagi untuk keluar...");
+      var snackbar = const SnackBar(content: Text("Tekan sekali lagi untuk keluar..."),behavior: SnackBarBehavior.floating);
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
       return Future.value(false);
     }
     return Future.value(true);

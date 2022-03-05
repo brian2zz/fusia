@@ -10,6 +10,7 @@ class ColorsTheme {
   static Color? lightRed = const Color(0xffEC1D2F);
   static Color? lightYellow = const Color(0xffECB83F);
   static Color? neutralDark = const Color(0xff223263);
+  static Color? lightDark = const Color.fromARGB(255, 92, 97, 244);
   static Color? brown = const Color(0xff664D31);
   static Color? whiteCream = const Color(0xffEEEEEE);
   static Color? lightBrown = const Color(0xffe3c9ab);

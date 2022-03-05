@@ -83,7 +83,7 @@ class CardMember extends StatelessWidget {
     return Container(
       height: 192.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8.0.r),
         gradient: color,
       ),
       child: Stack(
@@ -154,6 +154,7 @@ class CardMember extends StatelessWidget {
           ],
         ),
       );
+
   Widget LayerComponentCard1() => Positioned(
         child: Transform.translate(
           offset: const Offset(-30, 0.0),

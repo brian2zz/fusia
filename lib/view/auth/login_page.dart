@@ -136,12 +136,12 @@ Widget _buildButton(BuildContext context, TextEditingController phoneInput,
     var result = await controller.requestLoginController(phoneInput.text);
 
     if (result['status'] == 200) {
-      if(result['details']['status'] == "Success") {
+      if (result['details']['status'] == "Success") {
         hidedialog(context);
-          Navigator.of(context).pushNamed(
-            '/verification',
-            arguments: OTPArgumentsPassingData(phoneNumber: phoneInput.text),
-          );
+        Navigator.of(context).pushNamed(
+          '/verification',
+          arguments: OTPArgumentsPassingData(phoneNumber: phoneInput.text),
+        );
       } else {
         hidedialog(context);
         showToast(context, "gagal melakukan login.");

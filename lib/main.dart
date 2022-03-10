@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -74,10 +75,9 @@ class _MyAppState extends State<MyApp> {
                   const OtpVerification(),
               '/vouchers': (BuildContext context) => VoucherPage(),
               '/membership': (BuildContext context) => const membership(),
-              '/editaccount': (BuildContext context) =>
-                  const AccountInformation(),
-              '/changepassword': (BuildContext context) =>
-                  const ChangePassword(),
+              '/editaccount': (BuildContext context) => AccountInformation(),
+              // '/changepassword': (BuildContext context) =>
+              //     const ChangePassword(havePassword:),
               '/detailpromo': (BuildContext context) => DetailPromo(),
               '/benefit': (BuildContext context) => const BenefitPage(),
               '/detail_outlet': (BuildContext context) => DetailOutletPage(),

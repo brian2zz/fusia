@@ -1,22 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/controller/account_controller.dart';
 import 'package:fusia/controller/dashboard_controller.dart';
 import 'package:fusia/controller/login_controller.dart';
 import 'package:fusia/model/data_account_model.dart';
-import 'package:fusia/view/account/change_password_page.dart';
+import 'package:fusia/view/account/camera_screen.dart';
+// import 'package:fusia/view/account/change_password_page.dart';
 import 'package:fusia/widget/custom_appbar_account.dart';
+import 'package:fusia/widget/custom_progress_loading.dart';
+import 'package:fusia/widget/custom_toast.dart';
 import 'package:get/get.dart';
+// import 'package:camerax/camerax.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AccountInformation extends StatefulWidget {
-  const AccountInformation({Key? key}) : super(key: key);
-
+  AccountInformation({Key? key}) : super(key: key);
   @override
   _AccountInformationState createState() => _AccountInformationState();
 }
@@ -25,6 +30,7 @@ class _AccountInformationState extends State<AccountInformation> {
   //controller
   LoginController? userController;
   DashboardController? dashboardController;
+  AccountController? accountController;
 
   //global variable
 
@@ -36,7 +42,10 @@ class _AccountInformationState extends State<AccountInformation> {
   var tanggalLahirUser;
   var photoUrlUser;
   var membershipUser;
+  var havePassword;
 
+  String? oldPassword;
+  String? newPassword;
   @override
   initState() {
     super.initState();
@@ -51,11 +60,13 @@ class _AccountInformationState extends State<AccountInformation> {
   initConstructor() {
     userController = Get.put(LoginController());
     dashboardController = Get.put(DashboardController());
+    accountController = Get.put(AccountController());
 
     namaUser = "".obs;
     emailUser = "".obs;
     phoneUser = "".obs;
     tanggalLahirUser = "".obs;
+    havePassword = "".obs;
   }
 
   initData() async {
@@ -66,6 +77,7 @@ class _AccountInformationState extends State<AccountInformation> {
       var customerId = LoginController.customerId.value;
 
       retrieveDashboard(token, customerId);
+      // passwordStatus(customerId);
     });
   }
 
@@ -85,6 +97,21 @@ class _AccountInformationState extends State<AccountInformation> {
       }
     });
   }
+
+  // passwordStatus(customerId) async {
+  //   // showdialog(context);
+  //   var result = await accountController!
+  //       .RequestPassword(customerId, oldPassword, newPassword);
+  //   setState(() {
+  //     if (result['status'] == 200) {
+  //       if (result['details']['success'] == true) {
+  //         havePassword.value = 'false';
+  //       } else {
+  //         havePassword.value = 'true';
+  //       }
+  //     }
+  //   });
+  // }
 
   DateTime? date;
   String Birthday() {
@@ -154,13 +181,18 @@ class _AccountInformationState extends State<AccountInformation> {
                 GestureDetector(
                     child: Text("Gallery"),
                     onTap: () {
-                      _OpenGallery();
+                      // _OpenGallery();
                     }),
                 Padding(padding: EdgeInsets.all(10)),
                 GestureDetector(
                     child: Text("Camera"),
                     onTap: () {
-                      _OpenCamera();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return CameraScreen();
+                        }),
+                      );
                     }),
               ],
             ),
@@ -177,7 +209,7 @@ class _AccountInformationState extends State<AccountInformation> {
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           children: <Widget>[
-            _AvatarProfile(),
+            _AvatarProfile(context),
             SizedBox(
               height: 60.h,
             ),
@@ -187,7 +219,7 @@ class _AccountInformationState extends State<AccountInformation> {
             SizedBox(height: 10.h),
             TextFieldWidget(
                 focusNode: focusNode1,
-                textController: emailUser.value,
+                textController: namaUser.value,
                 textColor: textColor1),
             SizedBox(height: 10.h),
             Label(
@@ -205,10 +237,10 @@ class _AccountInformationState extends State<AccountInformation> {
             SizedBox(height: 10.h),
             _Birthday(context),
             SizedBox(height: 20.h),
-            _ChangePassword(context),
+            // _ChangePassword(context, havePassword.value),
             SizedBox(height: 25.h),
             ClipRRect(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(5.r),
               child: FlatButton(
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 40.w),
                 color: ColorsTheme.primary,
@@ -227,6 +259,36 @@ class _AccountInformationState extends State<AccountInformation> {
           ],
         ),
       );
+
+  Center _AvatarProfile(BuildContext context) {
+    return Center(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 60.h),
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: NetworkImage(
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+          ),
+          SizedBox(height: 25.h),
+          InkWell(
+            onTap: () {
+              _ShowDialog(context);
+            },
+            child: Text(
+              'Ubah Photo Profile',
+              style: TextStyle(
+                color: ColorsTheme.neutralDark,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Poppins',
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _Birthday(BuildContext context) => TextField(
         onTap: () => PickDate(context),
@@ -258,54 +320,34 @@ class _AccountInformationState extends State<AccountInformation> {
         ),
       );
 
-  Widget _ChangePassword(BuildContext context) => ListTile(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return ChangePassword();
-            }),
-          );
-        },
-        leading: Icon(Icons.lock_outline, color: ColorsTheme.neutralDark),
-        title: Text(
-          'Change Password        *****************',
-          style: TextStyle(
-            color: ColorsTheme.neutralDark,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
-          ),
-        ),
-        trailing: Icon(Icons.arrow_forward_ios),
-      );
-
-  Widget _AvatarProfile() => Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 60.h),
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
-            ),
-            SizedBox(height: 25.h),
-            InkWell(
-              onTap: () {
-                _ShowDialog(context);
-              },
-              child: Text(
-                'Ubah Photo Profile',
-                style: TextStyle(
-                  color: ColorsTheme.neutralDark,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+  // Widget _ChangePassword(BuildContext context, String havePassword) {
+  //   bool password;
+  //   if (havePassword == 'true') {
+  //     password = true;
+  //   } else {
+  //     password = false;
+  //   }
+  //   return ListTile(
+  //     onTap: () {
+  // Navigator.push(
+  //   context,
+  //   MaterialPageRoute(builder: (context) {
+  //     return ChangePassword(havePassword: password);
+  //   }),
+  // );
+  //     },
+  //     leading: Icon(Icons.lock_outline, color: ColorsTheme.neutralDark),
+  //     title: Text(
+  //       password ? 'Change Password' : 'Add Password',
+  //       style: TextStyle(
+  //         color: ColorsTheme.neutralDark,
+  //         fontWeight: FontWeight.bold,
+  //         fontFamily: 'Poppins',
+  //       ),
+  //     ),
+  //     trailing: Icon(Icons.arrow_forward_ios),
+  //   );
+  // }
 
   Future PickDate(BuildContext context) async {
     final initialDate = DateTime.now();

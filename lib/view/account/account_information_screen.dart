@@ -155,51 +155,6 @@ class _AccountInformationState extends State<AccountInformation> {
     super.dispose();
   }
 
-  File? imageFile;
-  _OpenGallery() async {
-    var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = File(picture!.path);
-    });
-  }
-
-  _OpenCamera() async {
-    var picture = await ImagePicker().pickImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = File(picture!.path);
-    });
-  }
-
-  Future<void> _ShowDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                GestureDetector(
-                    child: Text("Gallery"),
-                    onTap: () {
-                      // _OpenGallery();
-                    }),
-                Padding(padding: EdgeInsets.all(10)),
-                GestureDetector(
-                    child: Text("Camera"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return CameraScreen();
-                        }),
-                      );
-                    }),
-              ],
-            ),
-          ));
-        });
-  }
-
   Widget build(BuildContext context) => Scaffold(
         appBar: appBar(title: 'Account Information'),
         body: _body(context),
@@ -273,7 +228,12 @@ class _AccountInformationState extends State<AccountInformation> {
           SizedBox(height: 25.h),
           InkWell(
             onTap: () {
-              _ShowDialog(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return CameraScreen();
+                }),
+              );
             },
             child: Text(
               'Ubah Photo Profile',

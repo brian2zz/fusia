@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
 import 'package:fusia/view/account/camera_preview.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -25,7 +28,10 @@ class _CameraScreenState extends State<CameraScreen> {
         selectedCamera = 0;
         initCamera(cameras![selectedCamera!]).then((_) {});
       } else {
-        print('camera not found');
+        return AlertDialog(
+            content: Container(
+          child: Text('camera not found'),
+        ));
       }
     }).catchError((e) {
       print(e.code);
@@ -62,22 +68,30 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
+  XFile? imageFile;
+  _Gallery() async {
+    var picture = await ImagePicker().pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      if (picture != null) {
+        imageFile = XFile(picture.path);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PreviewCamera(imgPath: imageFile)));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    var ratio = size.width / size.height;
-    // print(ratio);
     return Scaffold(
         backgroundColor: ColorsTheme.black,
         body: Stack(
           children: [
-            // Transform.scale(
-            //   scale: cameraController!.value.aspectRatio / ratio,
             Align(
               alignment: Alignment.center,
               child: cameraPreview(),
             ),
-            // ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -89,7 +103,8 @@ class _CameraScreenState extends State<CameraScreen> {
                   children: <Widget>[
                     CameraToggle(),
                     CameraControl(context),
-                    Spacer(),
+                    OpenGallery(),
+                    // Spacer(),
                   ],
                 ),
               ),
@@ -102,11 +117,39 @@ class _CameraScreenState extends State<CameraScreen> {
     if (cameraController == null || !cameraController!.value.isInitialized) {
       return Text('Loading', style: TextStyle(color: ColorsTheme.white));
     }
-    return AspectRatio(
-      aspectRatio: cameraController!.value.aspectRatio,
-      child: CameraPreview(cameraController!),
+
+    final size = MediaQuery.of(context).size;
+    var deviceRatio = size.aspectRatio * cameraController!.value.aspectRatio;
+
+    if (deviceRatio < 1) deviceRatio = 1 / deviceRatio;
+
+    return Transform.scale(
+      scale: deviceRatio,
+      child: Center(
+          child: CameraPreview(
+              cameraController!) /*AspectRatio(
+          aspectRatio: cameraController!.value.aspectRatio,
+          child: ,
+        ),*/
+          ),
     );
   }
+
+  Widget OpenGallery() => Expanded(
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: IconButton(
+            onPressed: () {
+              _Gallery();
+            },
+            icon: Icon(
+              Icons.collections,
+              color: ColorsTheme.white,
+              size: 24.h,
+            ),
+          ),
+        ),
+      );
 
   Widget CameraToggle() {
     if (cameras == null || cameras!.isEmpty) {

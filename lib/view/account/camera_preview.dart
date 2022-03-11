@@ -20,7 +20,10 @@ class _PreviewCameraState extends State<PreviewCamera> {
         body: Container(
           child: Image.file(
             File(widget.imgPath!.path),
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+            alignment: Alignment.center,
           ),
         ));
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fusia/color/colors_theme.dart';
 
 class appBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -8,30 +10,41 @@ class appBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(50);
+  Size get preferredSize => Size.fromHeight(50.h);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white,
-      title: Text(
-        title,
-        style: TextStyle(
-          color: Color.fromARGB(255, 34, 50, 99),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
+      title: Padding(
+        padding: EdgeInsets.only(top: 25.h),
+        child: Text(
+          title,
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              fontSize: 16.sp,
+              color: ColorsTheme.neutralDark),
         ),
       ),
+      elevation: 0.0,
+      bottomOpacity: 0.0,
+      titleSpacing: -10.w,
+      leadingWidth: 63.w,
       leading: Builder(
-        builder: (context) => IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromARGB(255, 144, 152, 177),
+        builder: (context) => Container(
+          padding: EdgeInsets.only(top: 20.h),
+          child: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Color.fromARGB(255, 144, 152, 177),
+              size: 18.h,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
       ),
     );

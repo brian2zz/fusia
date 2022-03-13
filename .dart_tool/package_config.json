@@ -326,10 +326,22 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "progress_timeline",
+      "rootUri": "file:///C:/Users/FEBRIANSYAH/OneDrive/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/progress_timeline-0.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.7"
+    },
+    {
       "name": "quiver",
       "rootUri": "file:///C:/Users/FEBRIANSYAH/OneDrive/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-3.0.1+1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "scrollable_positioned_list",
+      "rootUri": "file:///C:/Users/FEBRIANSYAH/OneDrive/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/scrollable_positioned_list-0.1.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.3"
     },
     {
       "name": "shared_preferences",
@@ -482,7 +494,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-03-11T13:17:10.224707Z",
+  "generated": "2022-03-13T06:00:56.480719Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+// import 'package:progress_timeline/progress_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -245,7 +245,7 @@ class _bodyState extends State<body> {
             colorScheme: ColorScheme.light(primary: ColorsTheme.primary!)),
         child: Stepper(
           type: StepperType.horizontal,
-          steps: [
+          steps: <Step>[
             Step(
               isActive: value >= 0,
               title: Text('Bronze'),

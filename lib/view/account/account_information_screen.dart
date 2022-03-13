@@ -215,40 +215,38 @@ class _AccountInformationState extends State<AccountInformation> {
         ),
       );
 
-  Center _AvatarProfile(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 60.h),
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
-          ),
-          SizedBox(height: 25.h),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return CameraScreen();
-                }),
-              );
-            },
-            child: Text(
-              'Ubah Photo Profile',
-              style: TextStyle(
-                color: ColorsTheme.neutralDark,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-                decoration: TextDecoration.underline,
+  Widget _AvatarProfile(BuildContext context) => Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 60.h),
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: NetworkImage(
+                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+            ),
+            SizedBox(height: 25.h),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return CameraScreen();
+                  }),
+                );
+              },
+              child: Text(
+                'Ubah Photo Profile',
+                style: TextStyle(
+                  color: ColorsTheme.neutralDark,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
   Widget _Birthday(BuildContext context) => TextField(
         onTap: () => PickDate(context),
@@ -265,12 +263,12 @@ class _AccountInformationState extends State<AccountInformation> {
               borderSide: new BorderSide(
             color: ColorsTheme.whiteCream!,
           )),
-          hintText: 'Tanggal Lahir',
-          hintStyle: TextStyle(
-            color: ColorsTheme.grey,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
-          ),
+          // hintText: 'Tanggal Lahir',
+          // hintStyle: TextStyle(
+          //   color: ColorsTheme.grey,
+          //   fontWeight: FontWeight.bold,
+          //   fontFamily: 'Poppins',
+          // ),
         ),
         controller: TextEditingController(text: Birthday()),
         style: TextStyle(

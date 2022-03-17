@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'foto_model.dart';
+
 DataAccountModel dataAccountModelFromJson(String str) => DataAccountModel.fromJson(json.decode(str));
 
 class DataAccountModel {
@@ -15,6 +17,9 @@ class DataAccountModel {
         this.custEmail,
         this.custTgllahir,
         this.custMembership,
+        this.custPoint,
+        this.custPrewardTotal,
+        this.foto,
     });
 
     String? custId;
@@ -24,6 +29,9 @@ class DataAccountModel {
     String? custEmail;
     String? custTgllahir;
     String? custMembership;
+    String? custPoint;
+    String? custPrewardTotal;
+    Foto? foto;
 
     factory DataAccountModel.fromJson(Map<String, dynamic> json) => DataAccountModel(
         custId: json["cust_id"],
@@ -33,5 +41,8 @@ class DataAccountModel {
         custEmail: json["cust_email"],
         custTgllahir: json["cust_tgllahir"],
         custMembership: json["cust_membership"],
+        custPoint: json["cust_point"],
+        custPrewardTotal: json["cust_preward_total"],
+        foto: Foto.fromJson(json["foto"]),
     );
 }

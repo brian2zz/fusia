@@ -10,7 +10,7 @@ class appBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => Size.fromHeight(50.h);
+  Size get preferredSize => Size.fromHeight(75.h);
 
   @override
   Widget build(BuildContext context) {

@@ -72,7 +72,7 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
                                     : 'assets/icons/ic_menu_account.png',
                         color: (selectedIndex.value == index)
                             ? ColorsTheme.primary
-                            : ColorsTheme.grey,
+                            : ColorsTheme.neutralGrey,
                       ),
                     ),
                   ),
@@ -126,11 +126,11 @@ class _HomeNavigationMenu extends State<HomeNavigationMenu> {
         height: 58.h,
         width: 58.w,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pushNamed(context, '/reservation'),
           child: Icon(Icons.add, color: ColorsTheme.white),
           backgroundColor: ColorsTheme.primary,
           shape: CircleBorder(
-            side: BorderSide(color: ColorsTheme.grey!, width: 2.h),
+            side: BorderSide(color: ColorsTheme.neutralGrey!, width: 2.h),
           ),
           elevation: 0.h,
         ),

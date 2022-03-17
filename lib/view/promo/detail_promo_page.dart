@@ -28,7 +28,7 @@ class _DetailPromoState extends State<DetailPromo> {
     fontFamily: 'Poppins',
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
-    color: ColorsTheme.grey,
+    color: ColorsTheme.neutralGrey,
   );
 
   TextStyle productNameTextStyle = TextStyle(

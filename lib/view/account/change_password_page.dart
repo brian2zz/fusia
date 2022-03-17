@@ -130,7 +130,7 @@ class textField extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(
           Icons.lock_outlined,
-          color: ColorsTheme.grey,
+          color: ColorsTheme.neutralGrey,
         ),
         border: new OutlineInputBorder(
             borderSide: new BorderSide(

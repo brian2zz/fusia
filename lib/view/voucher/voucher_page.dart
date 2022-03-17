@@ -30,7 +30,6 @@ class _VoucherPageState extends State<VoucherPage> {
   var idVoucher;
   var nilaiRp;
   var tanggalAkhir;
-  // var
 
   TextStyle headerStyle = TextStyle(
     fontFamily: 'Poppins',
@@ -43,7 +42,8 @@ class _VoucherPageState extends State<VoucherPage> {
     super.initState();
 
     initConstructor();
-    initData();
+
+    getVoucher();
   }
 
   initConstructor() {
@@ -57,33 +57,14 @@ class _VoucherPageState extends State<VoucherPage> {
     tanggalAkhir = "".obs;
   }
 
-  initData() async {
+  getVoucher() async {
     await userController!.retrieveUserLocalData();
-
-    setState(() {
-      userToken.value = LoginController.userToken.value;
-      customerId.value = LoginController.customerId.value;
-
-      _loadData = retrieveVoucher(userToken.value, customerId.value);
-    });
-  }
-
-  retrieveVoucher(token, customerId) async {
+    var token = LoginController.userToken.value;
+    var Id = LoginController.customerId.value;
     var result = await voucherController!.retrieveVoucher(token, customerId);
-
-    setState(() {
-      if (result['status'] == 200) {
-        // VoucherModel responsedata =
-        // VoucherModel.fromJson(result['details']);
-        return result['details'];
-        // nilaiRp.value = responsedata.nilaiRp;
-        // tanggalAkhir.value = responsedata.tanggalAkhir;
-      }
-    });
+    // print(result['details']['results']);
+    return (result['details']);
   }
-  // getData() async {
-  //   return responsedata
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,36 +100,31 @@ class _VoucherPageState extends State<VoucherPage> {
                   Container(
                     height: 500,
                     color: Colors.white,
-                    child: ListView(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(top: 20),
-                          child: FutureBuilder(
-                            future: retrieveVoucher(userToken, customerId),
-                            builder: (context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasData) {
-                                var result = snapshot.data['result'];
-                                return ListView.builder(
-                                  itemCount: 200,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return CardVoucher(
-                                        HargaVoucher: "50.000",
-                                        Poin: 30,
-                                        Banner: AssetImage(
-                                            'assets/images/banner1.png'),
-                                        Identity: true);
-                                  },
-                                );
-                              } else {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                    child: Container(
+                      padding: EdgeInsets.only(top: 20),
+                      child: FutureBuilder(
+                        future: getVoucher(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            var result = snapshot.data['results'];
+                            return ListView.builder(
+                              itemCount: result.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return CardVoucher(
+                                    HargaVoucher: "50.000",
+                                    Poin: 30,
+                                    Banner:
+                                        AssetImage('assets/images/banner1.png'),
+                                    Identity: true);
+                              },
+                            );
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ),
 

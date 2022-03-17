@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fusia/server/arguments_pass/temp_pass_detail_outlet.dart';
 
 import 'package:fusia/view/account/account_information_screen.dart';
 import 'package:fusia/view/account/account_page.dart';
@@ -14,10 +15,13 @@ import 'package:fusia/view/benefits/benefits.dart';
 import 'package:fusia/view/home_dashboard_page.dart';
 import 'package:fusia/view/home_navigation_menu_page.dart';
 import 'package:fusia/view/onboarding_page.dart';
+import 'package:fusia/view/outlet/detail_outlet_menu_page.dart';
 import 'package:fusia/view/outlet/detail_outlet_page.dart';
+import 'package:fusia/view/outlet/detail_outlet_telephone_page.dart';
 import 'package:fusia/view/outlet/outlet_page.dart';
 import 'package:fusia/view/promo/detail_promo_page.dart';
 import 'package:fusia/view/promo/promo_page.dart';
+import 'package:fusia/view/reservation/reservation_page.dart';
 import 'package:fusia/view/splash_screen_page.dart';
 import 'package:fusia/view/voucher/voucher_page.dart';
 
@@ -81,6 +85,9 @@ class _MyAppState extends State<MyApp> {
               '/detailpromo': (BuildContext context) => DetailPromo(),
               '/benefit': (BuildContext context) => const BenefitPage(),
               '/detail_outlet': (BuildContext context) => DetailOutletPage(),
+              '/outlet_menu': (BuildContext context) => DetailOutletMenuPage(),
+              '/outlet_telephone': (BuildContext context) => DetailOutletTelephonePage(),
+              '/reservation': (BuildContext context) => const reservation(),
             },
           );
         });

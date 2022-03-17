@@ -218,7 +218,7 @@ class _CameraScreenState extends State<CameraScreen> {
   pressCapture(context) async {
     try {
       await cameraController!.takePicture().then((value) {
-        print(value);
+        // print(File(value.path).lengthSync());
         Navigator.push(
             context,
             MaterialPageRoute(

@@ -113,7 +113,7 @@ class CardMember extends StatelessWidget {
                   ),
                   SizedBox(height: 6.h),
                   Text(
-                    '${(point).toStringAsFixed(0)}pts',
+                    '${(point).toStringAsFixed(0)} pts',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 12.sp,

@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
 import 'package:fusia/controller/login_controller.dart';
-import 'package:fusia/model/sending_otp_status_model.dart';
 import 'package:fusia/server/arguments_pass/temp_pass_otp.dart';
 import 'package:fusia/widget/custom_progress_loading.dart';
 import 'package:fusia/widget/custom_toast.dart';
@@ -52,6 +51,67 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    
+    Widget mascot() => SizedBox(
+      height: 99.h,
+      child: Image.asset(
+        'assets/images/mascot.png',
+      ),
+    );
+
+    Widget header() => Container(
+      margin: EdgeInsets.only(top: 2.h, bottom: 5.h),
+      child: Text(
+        "Fumily by Fusia",
+        style: TextStyle(
+          color: ColorsTheme.neutralDark,
+          fontSize: 15.sp,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+    );
+
+    Widget labelPhone() => Container(
+      alignment: Alignment.topLeft,
+      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
+      child: Text(
+        "Sign in to continue",
+        style: TextStyle(
+          color: ColorsTheme.neutralGrey,
+          fontSize: 12.sp,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+    );
+
+    Widget formPhone() => TextFormField(
+      controller: phoneInput,
+      decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorsTheme.neutralGrey!),
+          ),
+          prefixIcon: SizedBox(
+            width: 24.w,
+            height: 24.h,
+            child: Image.asset('assets/icons/ic_phone.png'),
+          ),
+          /*Icon(
+            Icons.phone_iphone_outlined,
+            size: 30.w,
+          ),*/
+          hintText: "Phone Number",
+          hintStyle: TextStyle(color: ColorsTheme.neutralGrey!),
+          labelStyle: TextStyle(
+            color: ColorsTheme.neutralGrey!,
+          ),
+          labelText: "Phone Number",
+      ),
+      keyboardType: TextInputType.number,
+    );
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       child: SafeArea(
         child: Scaffold(
@@ -64,55 +124,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      height: 99.h,
-                      child: Image.asset(
-                        'assets/images/mascot.png',
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 2.h, bottom: 5.h),
-                      child: Text(
-                        "Fusia App",
-                        style: TextStyle(
-                          color: Colors.blueGrey.shade800,
-                          fontSize: 15.sp,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(top: 10.h, bottom: 10.h),
-                      child: Text(
-                        "Sign in to continue",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12.sp,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    TextFormField(
-                      controller: phoneInput,
-                      decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: ColorsTheme.grey!),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.phone_iphone_outlined,
-                            size: 30,
-                          ),
-                          hintText: "Phone Number",
-                          hintStyle: TextStyle(color: ColorsTheme.grey!),
-                          labelStyle: TextStyle(
-                            color: Colors.grey,
-                          ),
-                          labelText: "Phone Number"),
-                    ),
+                    mascot(),
+                    header(),
+                    labelPhone(),
+                    formPhone(),
                     SizedBox(
                       height: 6.h,
                     ),
@@ -131,6 +146,14 @@ class _LoginPageState extends State<LoginPage> {
 
 Widget _buildButton(BuildContext context, TextEditingController phoneInput,
     LoginController controller) {
+  
+    TextStyle alertStyle = TextStyle(
+      fontFamily: 'Poppins',
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w400,
+      color: ColorsTheme.white,
+    );
+
   requesttoLogin() async {
     showdialog(context);
     var result = await controller.requestLoginController(phoneInput.text);
@@ -144,7 +167,12 @@ Widget _buildButton(BuildContext context, TextEditingController phoneInput,
         );
       } else {
         hidedialog(context);
-        showToast(context, "gagal melakukan login.");
+        var snackbar = SnackBar(
+          content: Text("Gagal melakukan Login. Silahkan menghubungi Administrator untuk lebih lanjut.",style: alertStyle),
+          backgroundColor: ColorsTheme.black,
+          duration: const Duration(milliseconds: 1000),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     }
   }
@@ -160,6 +188,7 @@ Widget _buildButton(BuildContext context, TextEditingController phoneInput,
                   fontWeight: FontWeight.w500,
                   color: ColorsTheme.white),
             ),
+            backgroundColor: ColorsTheme.black,
             duration: const Duration(milliseconds: 1000),
           );
       ScaffoldMessenger.of(context).showSnackBar(snackbar());
@@ -168,111 +197,182 @@ Widget _buildButton(BuildContext context, TextEditingController phoneInput,
     }
   }
 
-  return Column(
-    children: <Widget>[
-      const Padding(padding: EdgeInsets.only(top: 16.0)),
-      InkWell(
-        onTap: () => validatePhoneInput(),
-        splashColor: ColorsTheme.white,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 8.0),
-          width: 400,
-          height: 57,
-          child: Center(
-            child: Text(
-              'Sign In',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14.sp,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w900),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          decoration: BoxDecoration(
-            color: ColorsTheme.primary,
-            borderRadius: BorderRadius.circular(6.0),
+  Widget accountSignIn(title,status) => InkWell(
+    onTap: () {
+      var snackbar = SnackBar(
+        content: Text("Fitur dalam Tahap Pengembangan", style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: ColorsTheme.black,
           ),
         ),
+        backgroundColor: ColorsTheme.lightYellow,
+        behavior: SnackBarBehavior.fixed,
+      );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    },
+    child: Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: ColorsTheme.neutralGrey!,width: 1.w),
+          borderRadius: BorderRadius.circular(5.r),
+        )
       ),
-      Padding(padding: EdgeInsets.only(top: 16.0)),
-      Row(
+      padding: EdgeInsets.all(16.w),
+      child: Row(
         children: [
-          buildDivider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'OR',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14.sp,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w900,
-              ),
+          SizedBox(
+            width: 24.w,
+            height: 24.h,
+            child: Image.asset((status == "google") ? 'assets/icons/ic_google.png' : 'assets/icons/ic_facebook.png'),
+          ),
+          SizedBox(width: (status == "google") ? 65.w : 58.w),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: ColorsTheme.neutralGrey,
+              fontSize: 14.sp,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
             ),
           ),
-          buildDivider(),
         ],
       ),
-      Padding(padding: EdgeInsets.only(top: 16.0)),
-      ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            onPrimary: Colors.grey,
-            minimumSize: Size(400, 57)),
-        onPressed: () {},
-        // icon: FaIcon(FontAwesomeIcons.google),
-        icon: Image.asset('assets/icons/ic_google.png'),
-        label: Text(
-          'Login with Google',
+    )
+  );
+
+  /*Widget accountSignIn(title,status) => ElevatedButton.icon(
+    style: ElevatedButton.styleFrom(
+        primary: ColorsTheme.white,
+        onPrimary: ColorsTheme.neutralGrey,
+        minimumSize: Size(400.w, 57.h),
+    ),
+    onPressed: () {},
+    icon: Image.asset((status == "google") ? 'assets/icons/ic_google.png' : 'assets/icons/ic_facebook.png'),
+    label: Text(
+      title,
+      style: TextStyle(
+        color: ColorsTheme.neutralGrey,
+        fontSize: 14.sp,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w900,
+      ),
+    ),
+  );*/
+
+  Widget forgotPasswordButton() => GestureDetector(
+    onTap: () {
+      var snackbar = SnackBar(
+        content: Text("Fitur dalam Tahap Pengembangan", style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: ColorsTheme.black,
+          ),
+        ),
+        backgroundColor: ColorsTheme.lightYellow,
+        behavior: SnackBarBehavior.fixed,
+      );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    },
+    child: Text(
+      'Forgot Password?',
+      style: TextStyle(
+        color: ColorsTheme.neutralDark,
+        fontSize: 12.sp,
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  );
+
+  Widget registerButton() => Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          "Don't have a account? ",
           style: TextStyle(
-            color: Colors.grey,
+            color: ColorsTheme.neutralGrey,
+            fontSize: 12.sp,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
+          child: Text(
+            'Register',
+            style: TextStyle(
+              color: ColorsTheme.neutralDark,
+              fontSize: 12.sp,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    );
+
+  Widget customDivider() => Row(
+    children: [
+      buildDivider(),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Text(
+          'OR',
+          style: TextStyle(
+            color: ColorsTheme.neutralGrey,
             fontSize: 14.sp,
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w900,
           ),
         ),
       ),
-      Padding(padding: EdgeInsets.only(top: 30.0)),
-      GestureDetector(
-        onTap: () => {},
+      buildDivider(),
+    ],
+  );
+
+  Widget buttonSubmission() => InkWell(
+    onTap: () => validatePhoneInput(),
+    splashColor: ColorsTheme.white,
+    child: Container(
+      padding: EdgeInsets.symmetric(vertical: 8.0.h),
+      width: 400,
+      height: 57,
+      child: Center(
         child: Text(
-          'Forgot Password?',
+          'Sign In',
           style: TextStyle(
-            color: Colors.blueGrey.shade900,
-            fontSize: 12.sp,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w900,
-          ),
+              color: Colors.white,
+              fontSize: 14.sp,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w900),
+          textAlign: TextAlign.center,
         ),
       ),
-      Padding(padding: EdgeInsets.only(top: 10.0)),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Don't have a account? ",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.sp,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => {Navigator.pushReplacementNamed(context, '/register')},
-            child: Text(
-              'Register',
-              style: TextStyle(
-                color: Colors.blueGrey.shade900,
-                fontSize: 12.sp,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
-        ],
+      decoration: BoxDecoration(
+        color: ColorsTheme.primary,
+        borderRadius: BorderRadius.circular(6.0.r),
       ),
+    ),
+  );
+
+  return Column(
+    children: <Widget>[
+      Padding(padding: EdgeInsets.only(top: 16.0.h)),
+      buttonSubmission(),
+      Padding(padding: EdgeInsets.only(top: 16.0.h)),
+      customDivider(),
+      Padding(padding: EdgeInsets.only(top: 16.0.h)),
+      accountSignIn("Login with Google", "google"),
+      Padding(padding: EdgeInsets.only(top: 5.0.h)),
+      accountSignIn("Login with facebook", "facebook"),
+      Padding(padding: EdgeInsets.only(top: 30.0.h)),
+      forgotPasswordButton(),
+      Padding(padding: EdgeInsets.only(top: 10.0.h)),
+      registerButton(),
     ],
   );
 }
@@ -280,7 +380,7 @@ Widget _buildButton(BuildContext context, TextEditingController phoneInput,
 Expanded buildDivider() {
   return Expanded(
       child: Divider(
-    color: Colors.grey,
-    height: 1.5,
+    color: ColorsTheme.neutralGrey,
+    height: 1.5.h,
   ));
 }

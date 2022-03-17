@@ -1,21 +1,31 @@
+
 import 'dart:convert';
 
+import 'package:fusia/model/outlet_model.dart';
 import 'package:fusia/server/local/local_server.dart';
-import 'package:fusia/server/network/login_net_utils.dart';
-import 'package:fusia/server/network/password_net_utils.dart';
-import 'package:fusia/server/network/photo_net_utils.dart';
+import 'package:fusia/server/network/outlet_net_utils.dart';
 import 'package:get/get.dart';
 
-class AccountController extends GetxController {
-  PasswordNetUtils passwordUtils = Get.put(PasswordNetUtils());
-  PhotoNetUtils photoUtils = Get.put(PhotoNetUtils());
-  // LoginNetUtils netutils = Get.put(LoginNetUtils());
-  // LocalUtils localUtils = Get.put(LocalUtils());
+class OutletController extends GetxController {
 
-  // static var customerId = "".obs;
-  // static var userToken = "".obs;
-  SendPhoto(customerId, PhotoName) async {
-    var result = await photoUtils.retrievePhoto(customerId, PhotoName);
+  OutletNetUtils netUtils = Get.put(OutletNetUtils());
+  LocalUtils localUtils = Get.put(LocalUtils());
+
+  static final masterIdOutlet1 = "".obs;
+
+  storedMasterId(masterId) async {
+    await localUtils.storeOutletMasterID(masterId);
+  }
+
+  retrieveMasterId() async {
+    await localUtils.retrieveOutletMasterID();
+
+    masterIdOutlet1.value = LocalUtils.masterIdOutlet.value;
+  }  
+
+  retrieveOutletListController(token) async {
+    var result = await netUtils.retrieveOutletList(token);
+
     Map<String, dynamic> out = {};
 
     if (result == 'ReqTimeOut') {
@@ -30,15 +40,19 @@ class AccountController extends GetxController {
             "Koneksi internet anda bermasalah. Silahkan cek jaringan anda kembali.",
       };
     } else if (result.statusCode == 200) {
+      
+      var resultConvert1 = result.body.replaceAll("(","");
+      var resultConvert2 = resultConvert1.replaceAll(")","");
+      
       out = {
         "status": 200,
-        "details": jsonDecode(result.body),
+        "details": outletModelFromJson(resultConvert2),
       };
     } else if (result.statusCode == 404) {
       out = {
         "status": 404,
         "details":
-            "login gagal dilakukan. Silahkan menghubungi Administrator untuk lebih lanjut.",
+            "Data Cabang tidak didapatkan. Silahkan menghubungi Administrator untuk lebih lanjut.",
       };
     } else {
       out = {
@@ -50,9 +64,9 @@ class AccountController extends GetxController {
     return out;
   }
 
-  RequestPassword(customerId, oldPassword, newPassword) async {
-    var result = await passwordUtils.retrievePassword(
-        customerId, oldPassword, newPassword);
+  retrieveDetailOutletController(masterId, token) async {
+    var result = await netUtils.retrieveDetailOutlet(masterId, token);
+
     Map<String, dynamic> out = {};
 
     if (result == 'ReqTimeOut') {
@@ -67,15 +81,19 @@ class AccountController extends GetxController {
             "Koneksi internet anda bermasalah. Silahkan cek jaringan anda kembali.",
       };
     } else if (result.statusCode == 200) {
+      
+      var resultConvert1 = result.body.replaceAll("(","");
+      var resultConvert2 = resultConvert1.replaceAll(")","");
+      
       out = {
         "status": 200,
-        "details": jsonDecode(result.body),
+        "details": outletModelFromJson(resultConvert2),
       };
     } else if (result.statusCode == 404) {
       out = {
         "status": 404,
         "details":
-            "login gagal dilakukan. Silahkan menghubungi Administrator untuk lebih lanjut.",
+            "Data Cabang tidak didapatkan. Silahkan menghubungi Administrator untuk lebih lanjut.",
       };
     } else {
       out = {

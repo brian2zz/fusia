@@ -2,8 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fusia/controller/login_controller.dart';
+import 'package:fusia/controller/outlet_controller.dart';
+import 'package:fusia/model/outlet_model.dart';
 import 'package:fusia/server/arguments_pass/temp_pass_detail_outlet.dart';
 import 'package:fusia/widget/custom_appbar.dart';
+import 'package:get/get.dart';
 
 import '../../color/colors_theme.dart';
 
@@ -16,16 +20,15 @@ class RewardPage extends StatefulWidget {
 
 class _RewardPageState extends State<RewardPage> {
   
-  List<String> dummyQuery = [
-    "Gandaria City",
-    "Grand Indonesia",
-    "Kota Kasablangka",
-    "Lippo Kemang",
-    "Pacific Place",
-    "PIK Avenue",
-    "Pondok Indah Mall",
-  ];
-  List<String> temporaryResetData = [];
+  OutletController? controller;
+  LoginController? loginController;
+
+  List<Result> allOutletData = [];
+  List<Result> filteredOutletData = [];
+
+  var token;
+
+  Future? loadData;
   
   TextStyle headerStyle = TextStyle(
     fontFamily: 'Poppins',
@@ -55,22 +58,59 @@ class _RewardPageState extends State<RewardPage> {
     color: ColorsTheme.neutralDark,
   );
 
-  searchInput(query) {
-    List<String> temporarySearch = [];
-    if(query.isNotEmpty) {
+  @override
+  initState() {
+    super.initState();
+
+    initConstructor();
+    initData();
+  }
+
+  initConstructor() async {
+    controller = Get.put(OutletController());
+    loginController = Get.put(LoginController());
+
+    token = "".obs;
+  }
+
+  initData() async {
+    await loginController!.retrieveUserLocalData();
+
+    setState(() {
+      token.value = LoginController.userToken.value;
+
+      loadData = loadDataOutlet(token.value);
+    });
+  }
+
+  loadDataOutlet(token) async {
+    var result = await controller!.retrieveOutletListController(token);
+
+    if(result['status'] == 200) {
+      var responsedata = result['details'];
+      
+      for (var element in responsedata.results!) {
+        print(element.cabangNama);
+        allOutletData.add(element);
+      }
+
       setState(() {
-        for(var i = 0; i < dummyQuery.length; i++) {
-          temporaryResetData.add(dummyQuery[i]);
-          if(dummyQuery[i].contains(query)) {
-            temporarySearch.add(dummyQuery[i]);
-          }
-        }
-        dummyQuery.clear();
-        dummyQuery = temporarySearch;
+        filteredOutletData = allOutletData;
+      });
+    }
+  }
+
+  searchInput(String query) {
+    List<Result> temporarySearch = [];
+
+    if(query.isEmpty) {
+      setState(() {
+        filteredOutletData = allOutletData;
       });
     } else {
+      temporarySearch = allOutletData.where((element) => element.cabangNama!.toLowerCase().contains(query.toLowerCase())).toList();
       setState(() {
-        dummyQuery = temporaryResetData;
+        filteredOutletData = temporarySearch;
       });
     }
   }
@@ -80,17 +120,22 @@ class _RewardPageState extends State<RewardPage> {
 
     Widget appbar() => CustomAppBar(title: "Outlets", isAccessDetail: false);
 
-    Widget itemList(datalist) => Column(
+    Widget itemList(Result datalist) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InkWell(
-          onTap: () => Navigator.pushNamed(context, '/detail_outlet',arguments: DetailOutletArgumentPass(name: datalist)), 
+          onTap: () {
+            setState(() {
+              controller!.storedMasterId(datalist.cabangId);
+              Navigator.pushNamed(context, '/detail_outlet');
+            });
+          }, 
           child: Padding(
             padding: EdgeInsets.only(top: 21.h,bottom: 21.h,right: 10.w),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(datalist,style: itemListTextStyle),
+                Text(datalist.cabangNama.toString(),style: itemListTextStyle),
                 RotatedBox(
                   quarterTurns: 2,
                   child: SizedBox(
@@ -106,7 +151,7 @@ class _RewardPageState extends State<RewardPage> {
             ),
           ),
         ),
-        Divider(color: ColorsTheme.grey),
+        Divider(color: ColorsTheme.neutralGrey),
       ],
     );
 
@@ -128,24 +173,54 @@ class _RewardPageState extends State<RewardPage> {
 
     Widget body() => Padding(
       padding: EdgeInsets.only(top: 9.h,left: 20.w,right: 20.w),
-      child: Column(
-        children: [
-          searchForm(),
-          Expanded(
-            child: ListView.builder(
-                itemCount: dummyQuery.length,
-                shrinkWrap: true,
-                itemBuilder: (context,index) => itemList(dummyQuery[index]),
-              ),
-          ),
-        ],
-      ),
+      child: FutureBuilder(
+        future: loadData,
+        builder: (context,AsyncSnapshot snapshot) {
+          if(snapshot.connectionState == ConnectionState.done) {
+              if(snapshot.hasData) {
+                return Center(
+                  child: Text("Data Outlet tidak tersedia.",style: contentStyle1),
+                );
+              } else {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    searchForm(),
+                    (filteredOutletData.isEmpty) ?
+                    Container(
+                      margin: EdgeInsets.only(top: 220.h),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Pencarian Data Outlet tidak tersedia.",style: contentStyle1),
+                        ],
+                      ),
+                    ) : Expanded(
+                      child: ListView.builder(
+                          itemCount: filteredOutletData.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context,index) => itemList(filteredOutletData[index]),
+                        ),
+                    )
+                  ],
+                );
+              }
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      )
     );
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       child: SafeArea(
         child: Scaffold(
-          body: body(),
+          body: SingleChildScrollView(
+            child: body(),
+          ),
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(78.h),
             child: appbar(),

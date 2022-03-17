@@ -9,6 +9,7 @@ import 'package:fusia/controller/account_controller.dart';
 import 'package:fusia/controller/dashboard_controller.dart';
 import 'package:fusia/controller/login_controller.dart';
 import 'package:fusia/model/data_account_model.dart';
+import 'package:fusia/model/foto_model.dart';
 import 'package:fusia/view/account/camera_screen.dart';
 // import 'package:fusia/view/account/change_password_page.dart';
 import 'package:fusia/widget/custom_appbar_account.dart';
@@ -67,6 +68,7 @@ class _AccountInformationState extends State<AccountInformation> {
     phoneUser = "".obs;
     tanggalLahirUser = "".obs;
     havePassword = "".obs;
+    photoUrlUser = "".obs;
   }
 
   initData() async {
@@ -89,11 +91,13 @@ class _AccountInformationState extends State<AccountInformation> {
       if (result['status'] == 200) {
         DataAccountModel responsedata =
             DataAccountModel.fromJson(result['details']['databody']);
-
+        Foto responsefoto =
+            Foto.fromJson(result['details']['databody']['foto']);
         namaUser.value = responsedata.custNama;
         tanggalLahirUser.value = responsedata.custTgllahir;
         phoneUser.value = responsedata.custHp;
         emailUser.value = responsedata.custEmail;
+        photoUrlUser.value = responsefoto.fotoUrl;
       }
     });
   }
@@ -122,28 +126,28 @@ class _AccountInformationState extends State<AccountInformation> {
     }
   }
 
-  Color? textColor1 = ColorsTheme.grey;
-  Color? textColor2 = ColorsTheme.grey;
-  Color? textColor3 = ColorsTheme.grey;
+  Color? textColor1 = ColorsTheme.neutralGrey;
+  Color? textColor2 = ColorsTheme.neutralGrey;
+  Color? textColor3 = ColorsTheme.neutralGrey;
   final FocusNode focusNode1 = FocusNode();
   final FocusNode focusNode2 = FocusNode();
   final FocusNode focusNode3 = FocusNode();
 
   void onFocusChange1() {
     setState(() {
-      textColor1 = focusNode1.hasFocus ? null : ColorsTheme.grey;
+      textColor1 = focusNode1.hasFocus ? null : ColorsTheme.neutralGrey;
     });
   }
 
   void onFocusChange2() {
     setState(() {
-      textColor2 = focusNode2.hasFocus ? null : ColorsTheme.grey;
+      textColor2 = focusNode2.hasFocus ? null : ColorsTheme.neutralGrey;
     });
   }
 
   void onFocusChange3() {
     setState(() {
-      textColor3 = focusNode3.hasFocus ? null : ColorsTheme.grey;
+      textColor3 = focusNode3.hasFocus ? null : ColorsTheme.neutralGrey;
     });
   }
 
@@ -222,7 +226,7 @@ class _AccountInformationState extends State<AccountInformation> {
             CircleAvatar(
               radius: 40,
               backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80'),
+                  'http://dev.koffiesoft.com/fusia_test/${photoUrlUser.value}'),
             ),
             SizedBox(height: 25.h),
             InkWell(
@@ -254,7 +258,7 @@ class _AccountInformationState extends State<AccountInformation> {
         decoration: InputDecoration(
           suffixIcon: Icon(
             Icons.date_range_outlined,
-            color: ColorsTheme.grey,
+            color: ColorsTheme.neutralGrey,
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: ColorsTheme.neutralDark!),

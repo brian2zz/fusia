@@ -1,6 +1,6 @@
 
 class DetailOutletArgumentPass {
-  final String name;
+  final String id;
 
-  DetailOutletArgumentPass({required this.name});
+  DetailOutletArgumentPass({required this.id});
 }

@@ -57,10 +57,10 @@ class LoginNetUtils {
 
   requestCreateAccount(paramsdata) async {
     Map<String, dynamic> bodyparams = {
-      "cust_nama": paramsdata[0],
-      "cust_email": paramsdata[1],
-      "cust_tgllahir": paramsdata[2],
-      "cust_hp": paramsdata[3],
+      "cust_nama": paramsdata["fullname"],
+      "cust_email": paramsdata["email"],
+      "cust_tgllahir": paramsdata["datebirth"],
+      "cust_hp": paramsdata["phone"],
       "stat_user": "1",
       "cust_app_check": "1",
     };

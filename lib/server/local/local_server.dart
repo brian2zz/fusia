@@ -7,6 +7,7 @@ class LocalUtils {
   static var token = "".obs;
   static var customerId = "".obs;
   static var statusLogin = "".obs;
+  static var masterIdOutlet = "".obs;
 
   storeUserLocal(statusLogin,token,customerId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -21,6 +22,18 @@ class LocalUtils {
 
     token.value = prefs.getString("user_token")!;
     customerId.value = prefs.getString("customer_id")!;
+  }
+
+  storeOutletMasterID(masterId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString("master_id_outlet", masterId);
+  }
+
+  retrieveOutletMasterID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    masterIdOutlet.value = prefs.getString("master_id_outlet")!;
   }
 
   retrieveIsLogin() async {

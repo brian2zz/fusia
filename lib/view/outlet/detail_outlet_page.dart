@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fusia/color/colors_theme.dart';
+import 'package:fusia/controller/login_controller.dart';
+import 'package:fusia/controller/outlet_controller.dart';
+import 'package:fusia/model/outlet_model.dart';
 import 'package:fusia/server/arguments_pass/temp_pass_detail_outlet.dart';
 import 'package:fusia/widget/custom_appbar.dart';
 import 'package:fusia/widget/custom_toast.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailOutletPage extends StatefulWidget {
   
@@ -15,6 +20,11 @@ class DetailOutletPage extends StatefulWidget {
 }
 
 class _DetailOutletPageState extends State<DetailOutletPage> {
+
+  LoginController? loginController;
+  OutletController? outletController;
+
+  Future? loadData;
 
   TextStyle outletStatusTextStyle = TextStyle(
     fontFamily: 'Poppins',
@@ -37,14 +47,71 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
     color: ColorsTheme.black,
   );
 
+  var phone;
+  var latitude,longitude;
+  var menuPhoto, bannerPhoto, bannerLogo;
+  var address, locatedOutlet, nameOutlet;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initConstructor();
+    initData();
+  }
+
+  initConstructor() {
+    loginController = Get.put(LoginController());
+    outletController = Get.put(OutletController());
+
+    address = "".obs;
+    phone = "".obs;
+    nameOutlet = "".obs;
+    locatedOutlet = "".obs;
+  }
+
+  initData() async {
+    await loginController!.retrieveUserLocalData();
+    await outletController!.retrieveMasterId();
+
+    setState(() {
+      
+      var _token = LoginController.userToken;
+      var _masterId = OutletController.masterIdOutlet1;
+
+      loadData = loadDetailOutlet(_masterId,_token);
+    });
+
+  }
+
+  loadDetailOutlet(masterId,token) async {
+    var result = await outletController!.retrieveDetailOutletController(masterId, token);
+
+    if(result['status'] == 200) {
+      OutletModel responsedata = result['details'];
+
+      for (var element in responsedata.results!) {
+        setState(() {
+          
+          nameOutlet.value = element.cabangNama;
+          
+          (element.cabangAlamat != "") ? address.value = element.cabangAlamat : address.value = "Tidak Diketahui";
+          (element.cabangTelp != "") ? phone.value = element.cabangTelp : phone.value = "Tidak Diketahui"; 
+
+        });
+        break;
+      }
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-    final detailOutlet = ModalRoute.of(context)!.settings.arguments as DetailOutletArgumentPass;
 
-    Widget appbar() => CustomAppBar(title: "Outlets in Jakarta - ${detailOutlet.name}", isAccessDetail: true);
+    Widget appbar() => CustomAppBar(title: "Outlets in Jakarta - ${nameOutlet.value}", isAccessDetail: true);
 
     Widget image() => SizedBox(
+        width: ScreenUtil().screenWidth,
         height: 283.h,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,19 +119,18 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             FittedBox(
-              fit: BoxFit.cover,
-              child: Image.asset('assets/images/detail_image.png'),
+              fit: BoxFit.scaleDown,
+              child: Image.asset('assets/images/no_image.png'),
             ),
           ],
         )
       );
 
     Widget outletStatus() => Container(
-      width: 69.w,
       height: 24.h,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 18.w,vertical: 3.h),
-        child: Center(child: Text("OPEN",style: outletStatusTextStyle)),
+        child: Center(child: Text("CLOSED",style: outletStatusTextStyle)),
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
@@ -77,8 +143,8 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Kampoeng Timbel",style: outletLabelTextStyle),
-            Text("08:00 Pagi - 20:15 Malam",style: outletLabelTextStyle),
+            Text("Fusia",style: outletLabelTextStyle),
+            Text("Belum Tersedia",style: outletLabelTextStyle),
           ],
         ),
       ],
@@ -125,7 +191,7 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
             child: SizedBox(
               width: 38.w,
               height: 22.h,
-              child: Image.asset('assets/images/logo_onboarding_2.png'),
+              child: Image.asset('assets/images/logo_onboarding_1.png'),
             ),
           ),
         ),
@@ -137,11 +203,17 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
     Widget btnAccessSubMenu(status) => InkWell(
       onTap: () {
         if(status == "menu") {
-          showToast(context, "Fitur Menu masih dalam tahap pengembangan.");
+          Navigator.pushNamed(context, '/outlet_menu');
         } else if(status == "maps") {
           showToast(context, "Fitur Maps masih dalam tahap pengembangan.");
         } else {
-          showToast(context, "Fitur Telepon masih dalam tahap pengembangan.");
+          if(phone.value != "") {
+            launch("tel://0881036014226");
+          } else {
+            launch("tel://${phone.value}");
+          }
+          //Navigator.pushNamed(context, '/outlet_telephone');
+          //showToast(context, "Fitur Telepon masih dalam tahap pengembangan.");
         }
       },
       child: Container(
@@ -191,7 +263,7 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
       ],
     );
 
-    Widget body() => Column(
+    Widget contentBody() => Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         Stack(
@@ -212,20 +284,38 @@ class _DetailOutletPageState extends State<DetailOutletPage> {
         ),
         Padding(
           padding: EdgeInsets.only(top: 27.h,left: 21.w,right: 21.w),
-          child: Column(
+          child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              labelDescription("Located in", detailOutlet.name,"location"),
+              labelDescription("Located in", nameOutlet.value,"location"),
               SizedBox(height: 12.h),
-              labelDescription("Address", "Jl. Sultan Iskandar Muda, RT.10/RW.6, Kby. Lama Utara, Kec. Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12240","address"),
+              labelDescription("Address", address.value,"address"),
               SizedBox(height: 12.h),
-              labelDescription("Phone", "021-12345678","phone"),
+              labelDescription("Phone", phone.value,"phone"),
             ],
-          ),
+          )),
         )
       ],
+    );
+
+    Widget body() => FutureBuilder(
+      future: loadData,
+      builder: (context,snapshot) {
+        if(snapshot.connectionState == ConnectionState.done) {
+          if(snapshot.hasData) {
+            return Center(
+              child: Text("Data Outlet Kosong",style: outletStatusTextStyle),
+            );
+          } else {
+            return contentBody();
+          }
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
     
     return AnnotatedRegion<SystemUiOverlayStyle>(
